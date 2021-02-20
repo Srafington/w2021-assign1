@@ -41,32 +41,42 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelector("#loading").style.display = "none";
     }
     console.log(companies[0]);
+    displayCompanies();
+
+    function displayCompanies(){
+        const list = document.querySelector("#companyList");
+        list.innerHTML = "";
+        companies.forEach(company => {
+            let option = document.createElement('li');
+            option.textContent = company.name;
+            list.appendChild(option);
+        })
+    }
 
 
 
     //keyboard event handlers
     const searchBox = document.querySelector('.search');
-    const suggestionList = document.querySelector('#filteredList');
+    //const suggestionList = document.querySelector('#filteredList');
     searchBox.addEventListener('keyup', displayMatches);
 
+    //https://www.w3schools.com/howto/howto_js_filter_lists.asp
 
     function displayMatches() {
-        if (this.value.length >= 3) {
-            const matches = findMatches(this.value, companies);
-            suggestionList.innerHTML = "";
-            matches.forEach(match => {
-                let option = document.createElement('option');
-                option.textContent = match.name;
-                suggestionList.appendChild(option);
-            })
+        filter = searchBox.value.toUpperCase();
+        ul = document.querySelector("#companyList");
+        li = ul.getElementsByTagName("li");
+        for (let i = 0; i < li.length; i++) {
+            let item = li[i];
+            textValue = item.textContent;
+            if (textValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
         }
+
     }
 
-    function findMatches(lettersToMatch, movies) {
-        return companies.filter(obj => {
-            const regex = new RegExp(lettersToMatch, 'gi');
-            return obj.name.match(regex);
-        });
-    }
 
 });
