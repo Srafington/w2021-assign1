@@ -80,6 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const name = e.target.textContent;
             const selectedCompany = companies.find(company => company.name == name);
             displayInfo(selectedCompany);
+            displayMap(selectedCompany);
         }
     });
 
@@ -99,3 +100,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 });
+
+function displayMap(company){
+    let longitude = company.longitude;
+    let latitude = company.latitude;
+    initMap(longitude, latitude);
+    document.querySelector('#map').style.height = "650px";
+
+}
+
+var map;
+function initMap(longitude, latitude) {
+    map = new google.maps.Map(document.querySelector('#map'), {
+        center: { lat: latitude, lng: longitude },
+        mapTypeId: 'satellite',
+        zoom: 18
+    });
+}
