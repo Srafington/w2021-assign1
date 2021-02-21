@@ -43,6 +43,10 @@ ul#companyList li {
     background-color: rgb(179, 177, 177);
 }
 
+div.b section {
+    display: none;
+    flex-direction: column;	
+}
 
 .box {
     border: 1px solid rgba(0, 0, 0, 0.8);
