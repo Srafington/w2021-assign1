@@ -40,8 +40,8 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelector("form.textbox").style.display = "block";
         document.querySelector("#loading").style.display = "none";
     }
-    console.log(companies[0]);
     displayCompanies();
+    
 
     function displayCompanies(){
         const list = document.querySelector("#companyList");
@@ -53,11 +53,8 @@ document.addEventListener("DOMContentLoaded", function () {
         })
     }
 
-
-
     //keyboard event handlers
     const searchBox = document.querySelector('.search');
-    //const suggestionList = document.querySelector('#filteredList');
     searchBox.addEventListener('keyup', displayMatches);
 
     //https://www.w3schools.com/howto/howto_js_filter_lists.asp
@@ -76,6 +73,28 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
+    }
+
+    document.querySelector("#companyList").addEventListener("click", function(e){
+        if(e.target && e.target.nodeName.toLowerCase() == "li"){
+            const name = e.target.textContent;
+            const selectedCompany = companies.find(company => company.name == name);
+            displayInfo(selectedCompany);
+        }
+    });
+
+    function displayInfo(selectedCompany){
+        document.querySelector("div.b section").style.display = "flex";
+        document.querySelector("#logo").src = `logos/${selectedCompany.symbol}.svg`;
+        console.log(`logos/${selectedCompany.symbol}.svg`);
+        document.querySelector("#symbol").textContent = selectedCompany.symbol;
+        document.querySelector("#name").textContent = selectedCompany.name;
+        document.querySelector("#sub").textContent = selectedCompany.subindustry;
+        document.querySelector("#address").textContent = selectedCompany.address;
+        document.querySelector("#website").href = selectedCompany.website;
+        document.querySelector("#website").textContent = selectedCompany.website;
+        document.querySelector("#exchange").textContent = selectedCompany.exchange;
+        document.querySelector("#description").textContent = selectedCompany.description;
     }
 
 
