@@ -18,12 +18,42 @@
         </div>
         <div class="box a">
             <h2>List of Companies</h2>
+            <div id="loading"></div>
+            <form class=textbox>
+                <fieldset>
+                    <input type="text" class="search" placeholder="Type for matching company"
+                        title="Type in a company name">
+                    <ul id="companyList"></ul>
+                    <!-- <datalist id="filteredList">
+                    </datalist> -->
+                </fieldset>
+            </form>
         </div>
         <div class="box b">
             <h2>Company Information</h2>
+            <section>
+                <img id="logo">
+                <label>Company Symbol:</label>
+                <span id="symbol"></span>
+                <label>Company Name:</label>
+                <span id="name"></span>
+                <label>Sector:</label>
+                <span id="sector"></span>
+                <label>Subindustry:</label>
+                <span id="sub"></span>
+                <label>Address:</label>
+                <span id="address"></span>
+                <label>Website:</label>
+                <span><a href="" id="website"></a></span>
+                <label>Exchange:</label>
+                <span id="exchange"></span>
+                <label>Description:</label>
+                <span id="description"></span>
+            </section>
         </div>
         <div class="box c">
             <h2>Map</h2>
+            <div id="map"></div>
         </div>
         <div class="box d">
             <h2>Stock Data</h2>
@@ -35,8 +65,8 @@
     </main>
 
     <script src="js/a1.js"></script>
-    <!-- <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhOXRhKO0orMSIxzNRvj-a4R52U325C-M&callback=initMap"></script> -->
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhOXRhKO0orMSIxzNRvj-a4R52U325C-M&callback=initMap"></script>
 </body>
 
 </html>
