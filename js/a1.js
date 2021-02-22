@@ -99,21 +99,22 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
+    function displayMap(company){
+        let longitude = company.longitude;
+        let latitude = company.latitude;
+        drawMap(longitude, latitude);
+        document.querySelector('#map').style.height = "650px";
+    
+    }
+    
+
+    function drawMap(longitude, latitude) {
+        map = new google.maps.Map(document.querySelector('#map'), {
+            center: { lat: latitude, lng: longitude },
+            mapTypeId: 'satellite',
+            zoom: 18
+        });
+    }
 });
 
-function displayMap(company){
-    let longitude = company.longitude;
-    let latitude = company.latitude;
-    initMap(longitude, latitude);
-    document.querySelector('#map').style.height = "650px";
-
-}
-
-var map;
-function initMap(longitude, latitude) {
-    map = new google.maps.Map(document.querySelector('#map'), {
-        center: { lat: latitude, lng: longitude },
-        mapTypeId: 'satellite',
-        zoom: 18
-    });
-}
+function initMap() {}
