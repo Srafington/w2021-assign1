@@ -2,8 +2,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // the URL for our data
     const companyData = 'http://www.randyconnolly.com/funwebdev/3rd/api/stocks/companies.php'
+    const stockLink = 'https://www.randyconnolly.com/funwebdev/3rd/api/stocks/history.php?symbol='
 
     const companies = retrieveStorage();
+    const stocks = [];
 
     function retrieveStorage() {
         return JSON.parse(localStorage.getItem('companies'))
@@ -24,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch(companyData)
             .then(response => response.json())
             .then(data => {
-                console.log("hello");
+
                 document.querySelector("form.textbox").style.display =
                     "block";
                 document.querySelector("#loading").style.display =
@@ -41,9 +43,9 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelector("#loading").style.display = "none";
     }
     displayCompanies();
-    
 
-    function displayCompanies(){
+
+    function displayCompanies() {
         const list = document.querySelector("#companyList");
         list.innerHTML = "";
         companies.forEach(company => {
@@ -75,16 +77,40 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-    document.querySelector("#companyList").addEventListener("click", function(e){
-        if(e.target && e.target.nodeName.toLowerCase() == "li"){
+    document.querySelector("#companyList").addEventListener("click", function (e) {
+        if (e.target && e.target.nodeName.toLowerCase() == "li") {
             const name = e.target.textContent;
             const selectedCompany = companies.find(company => company.name == name);
             displayInfo(selectedCompany);
             displayMap(selectedCompany);
+            const stockData = `${stockLink}${selectedCompany.symbol}`;
+            console.log(stockData);
+            fetch(stockData)
+                .then(response => response.json())
+                .then(data => {
+                    stocks.push(...data);
+                    displayStock(selectedCompany.symbol);
+
+                })
+                .catch(error => console.error(error));
         }
     });
 
-    function displayInfo(selectedCompany){
+    function displayStock(symbol) {
+        const table = document.querySelector("#stock");
+        for (let stock of stocks) {
+            let row = document.createElement("tr");
+            for (let item in stock) {
+                let data = document.createElement("td");
+                data.textContent = stock[item];
+                row.appendChild(data);
+            }
+            table.appendChild(row);
+        }
+
+    }
+
+    function displayInfo(selectedCompany) {
         document.querySelector("div.b section").style.display = "flex";
         document.querySelector("#logo").src = `logos/${selectedCompany.symbol}.svg`;
         console.log(`logos/${selectedCompany.symbol}.svg`);
@@ -99,14 +125,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    function displayMap(company){
+    function displayMap(company) {
         let longitude = company.longitude;
         let latitude = company.latitude;
         drawMap(longitude, latitude);
         document.querySelector('#map').style.height = "650px";
-    
+
     }
-    
+
 
     function drawMap(longitude, latitude) {
         map = new google.maps.Map(document.querySelector('#map'), {
@@ -117,4 +143,4 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-function initMap() {} 
+function initMap() { }
