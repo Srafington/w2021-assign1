@@ -88,26 +88,117 @@ document.addEventListener("DOMContentLoaded", function () {
             fetch(stockData)
                 .then(response => response.json())
                 .then(data => {
-                    stocks.push(...data);
-                    displayStock(selectedCompany.symbol);
+                    displayStock(data, defaultSort);
+                    document.querySelector("#stock").addEventListener('click', function (e) {
 
+                        if (e.target && e.target.nodeName.toLowerCase() == "th") {
+                            if (e.target.textContent == "Date") {
+                                displayStock(data, defaultSort);
+                            } else if (e.target.textContent == "Volume") {
+                                displayStock(data, volumeSort);
+                            } else if (e.target.textContent == "Open") {
+                                displayStock(data, openSort);
+                            } else if (e.target.textContent == "Close") {
+                                displayStock(data, closeSort);
+                            } else if (e.target.textContent == "High") {
+                                displayStock(data, highSort);
+                            } else {
+                                displayStock(data, lowSort);
+                            }
+
+
+                        }
+                    });
                 })
                 .catch(error => console.error(error));
         }
     });
 
-    function displayStock(symbol) {
+
+    function defaultSort(a, b) {
+        if (new Date(a.date) < new Date(b.date)) {
+            return 1;
+        } else if (new Date(a.date) > new Date(b.date)) {
+            return -1
+        } else
+            return 0;
+    }
+    // function volumeSort(property) {
+    //     let value = property;
+    //     function sortFunction(a, b){
+    //     if (a.value < b.value) {
+    //         return 1;
+    //     } else if (a.value > b.value) {
+    //         return -1
+    //     } else
+    //         return 0;
+    // }
+    // return sortFunction;
+    // }
+
+    function volumeSort(a, b) {
+        if (a.volume < b.volume) {
+            return 1;
+        } else if (a.volume > b.volume) {
+            return -1
+        } else
+            return 0;
+    }
+
+    function openSort(a, b) {
+        if (a.open < b.open) {
+            return 1;
+        } else if (a.open > b.open) {
+            return -1
+        } else
+            return 0;
+    }
+
+    function closeSort(a, b) {
+        if (a.close < b.close) {
+            return 1;
+        } else if (a.close > b.close) {
+            return -1
+        } else
+            return 0;
+    }
+
+    function highSort(a, b) {
+        if (a.high < b.high) {
+            return 1;
+        } else if (a.high > b.high) {
+            return -1
+        } else
+            return 0;
+    }
+
+    function lowSort(a, b) {
+        if (a.low < b.low) {
+            return 1;
+        } else if (a.low > b.low) {
+            return -1
+        } else
+            return 0;
+    }
+
+
+    function displayStock(stocks, sortFunction) {
+
+        document.querySelector("#stock").innerHTML = `<tr id="stockHeaders">
+        <th>Date</th><th>Volume</th><th>Open</th><th>Close</th><th>High</th><th>Low</th></tr>`;
+        const sortedStock = stocks.sort(sortFunction);
         const table = document.querySelector("#stock");
-        for (let stock of stocks) {
+        for (let stock of sortedStock) {
             let row = document.createElement("tr");
             for (let item in stock) {
-                let data = document.createElement("td");
-                data.textContent = stock[item];
-                row.appendChild(data);
+                if (item == "date" || item == "open" || item == "close" || item == "high" || item == "low" || item == "volume") {
+                    let data = document.createElement("td");
+                    data.textContent = stock[item];
+                    row.appendChild(data);
+                }
             }
             table.appendChild(row);
         }
-
     }
 
     function displayInfo(selectedCompany) {

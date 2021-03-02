@@ -53,6 +53,10 @@ ul#companyList li {
 
 }
 
+#stock th:hover{
+    cursor: pointer;
+}
+
 div.b section {
     display: none;
     flex-direction: column;	
