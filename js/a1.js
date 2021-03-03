@@ -84,11 +84,11 @@ document.addEventListener("DOMContentLoaded", function () {
             displayInfo(selectedCompany);
             displayMap(selectedCompany);
             const stockData = `${stockLink}${selectedCompany.symbol}`;
-            console.log(stockData);
             fetch(stockData)
                 .then(response => response.json())
                 .then(data => {
                     displayStock(data, defaultSort);
+                    displayStats(data);
                     document.querySelector("#stock").addEventListener('click', function (e) {
 
                         if (e.target && e.target.nodeName.toLowerCase() == "th") {
@@ -106,13 +106,64 @@ document.addEventListener("DOMContentLoaded", function () {
                                 displayStock(data, lowSort);
                             }
 
-
                         }
                     });
                 })
                 .catch(error => console.error(error));
         }
     });
+
+    function displayStats(stocks) {
+        document.querySelector(".e").style.height = "300px";
+        const stats = [];
+        //volume calculations
+        let averageVolume = 0;
+        stocks.forEach(stock => averageVolume += parseFloat(stock.volume));
+        const sortedByVolume = stocks.sort(volumeSort);
+        stats.push(["Volume:", Math.round(averageVolume / stocks.length),
+            Math.round(parseFloat(sortedByVolume[0].volume)), Math.round(parseFloat(sortedByVolume[sortedByVolume.length - 1].volume))]);
+
+        //open calculations
+        let averageOpen = 0;
+        stocks.forEach(stock => averageOpen += parseFloat(stock.open));
+        const sortedByOpen = stocks.sort(openSort);
+        stats.push(["Open:", currency(averageOpen / stocks.length),
+            currency(parseFloat(sortedByOpen[0].open)), currency(parseFloat(sortedByOpen[sortedByOpen.length - 1].open))]);
+
+        //close calculations
+        let averageClose = 0;
+        stocks.forEach(stock => averageClose += parseFloat(stock.close));
+        const sortedByClose = stocks.sort(closeSort);
+        stats.push(["Close:", currency(averageClose / stocks.length),
+            currency(parseFloat(sortedByClose[0].close)), currency(parseFloat(sortedByClose[sortedByClose.length - 1].close))]);
+
+        //high calculations
+        let averageHigh = 0;
+        stocks.forEach(stock => averageHigh += parseFloat(stock.high));
+        const sortedByHigh = stocks.sort(highSort);
+        stats.push(["High:", currency(averageHigh / stocks.length),
+            currency(parseFloat(sortedByHigh[0].high)), currency(parseFloat(sortedByHigh[sortedByHigh.length - 1].high))]);
+
+        //low calculations
+        let averageLow = 0;
+        stocks.forEach(stock => averageLow += parseFloat(stock.low));
+        const sortedByLow = stocks.sort(lowSort);
+        stats.push(["Low:", currency(averageLow / stocks.length),
+            currency(parseFloat(sortedByLow[0].low)), currency(parseFloat(sortedByLow[sortedByHigh.length - 1].low))]);
+
+        const table = document.querySelector("#stats");
+        table.innerHTML = `<tr id="statHeaders"><th>Data Category</th><th>Average</th><th>Maximum</th><th>Minimum</th></tr>`
+        for (let category of stats) {
+            let row = document.createElement("tr");
+            for (let item of category) {
+                let data = document.createElement("td");
+                data.textContent = item;
+                row.appendChild(data);
+            }
+            table.appendChild(row);
+        }
+
+    }
 
 
     function defaultSort(a, b) {
@@ -183,7 +234,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     function displayStock(stocks, sortFunction) {
-
+        document.querySelector(".d").style.width = "680px";
+        document.querySelector("table").style.overflowY = "scroll";
         document.querySelector("#stock").innerHTML = `<tr id="stockHeaders">
         <th>Date</th><th>Volume</th><th>Open</th><th>Close</th><th>High</th><th>Low</th></tr>`;
         const sortedStock = stocks.sort(sortFunction);
@@ -191,9 +243,17 @@ document.addEventListener("DOMContentLoaded", function () {
         for (let stock of sortedStock) {
             let row = document.createElement("tr");
             for (let item in stock) {
-                if (item == "date" || item == "open" || item == "close" || item == "high" || item == "low" || item == "volume") {
+                if (item == "open" || item == "close" || item == "high" || item == "low") {
                     let data = document.createElement("td");
-                    data.textContent = stock[item];
+                    data.textContent = currency(stock[item]);
+                    row.appendChild(data);
+                } else if (item == "date") {
+                    let data = document.createElement("td");
+                    data.textContent = new Date(stock[item]);
+                    row.appendChild(data);
+                } else if (item == "volume") {
+                    let data = document.createElement("td");
+                    data.textContent = Math.round(stock[item]);
                     row.appendChild(data);
                 }
             }
@@ -204,7 +264,6 @@ document.addEventListener("DOMContentLoaded", function () {
     function displayInfo(selectedCompany) {
         document.querySelector("div.b section").style.display = "flex";
         document.querySelector("#logo").src = `logos/${selectedCompany.symbol}.svg`;
-        console.log(`logos/${selectedCompany.symbol}.svg`);
         document.querySelector("#symbol").textContent = selectedCompany.symbol;
         document.querySelector("#name").textContent = selectedCompany.name;
         document.querySelector("#sub").textContent = selectedCompany.subindustry;
@@ -232,6 +291,13 @@ document.addEventListener("DOMContentLoaded", function () {
             zoom: 18
         });
     }
+
+    const currency = function (num) {
+        return new Intl.NumberFormat('en-us', {
+            style: 'currency',
+            currency: 'USD'
+        }).format(num);
+    };
 });
 
 function initMap() { }
