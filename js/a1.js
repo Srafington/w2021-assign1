@@ -188,9 +188,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // }
 
     function volumeSort(a, b) {
-        if (a.volume < b.volume) {
+        if (parseInt(a.volume) < parseInt(b.volume)) {
             return 1;
-        } else if (a.volume > b.volume) {
+        } else if (parseInt(a.volume) > parseInt(b.volume)) {
             return -1
         } else
             return 0;
