@@ -2,8 +2,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // the URL for our data
     const companyData = 'http://www.randyconnolly.com/funwebdev/3rd/api/stocks/companies.php'
+    const stockLink = 'https://www.randyconnolly.com/funwebdev/3rd/api/stocks/history.php?symbol='
 
     const companies = retrieveStorage();
+    const stocks = [];
 
     function retrieveStorage() {
         return JSON.parse(localStorage.getItem('companies'))
@@ -24,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch(companyData)
             .then(response => response.json())
             .then(data => {
-                console.log("hello");
+
                 document.querySelector("form.textbox").style.display =
                     "block";
                 document.querySelector("#loading").style.display =
@@ -41,9 +43,9 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelector("#loading").style.display = "none";
     }
     displayCompanies();
-    
 
-    function displayCompanies(){
+
+    function displayCompanies() {
         const list = document.querySelector("#companyList");
         list.innerHTML = "";
         companies.forEach(company => {
@@ -75,19 +77,193 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-    document.querySelector("#companyList").addEventListener("click", function(e){
-        if(e.target && e.target.nodeName.toLowerCase() == "li"){
+    document.querySelector("#companyList").addEventListener("click", function (e) {
+        if (e.target && e.target.nodeName.toLowerCase() == "li") {
             const name = e.target.textContent;
             const selectedCompany = companies.find(company => company.name == name);
             displayInfo(selectedCompany);
             displayMap(selectedCompany);
+            const stockData = `${stockLink}${selectedCompany.symbol}`;
+            fetch(stockData)
+                .then(response => response.json())
+                .then(data => {
+                    displayStock(data, defaultSort);
+                    displayStats(data);
+                    document.querySelector("#stock").addEventListener('click', function (e) {
+
+                        if (e.target && e.target.nodeName.toLowerCase() == "th") {
+                            if (e.target.textContent == "Date") {
+                                displayStock(data, defaultSort);
+                            } else if (e.target.textContent == "Volume") {
+                                displayStock(data, volumeSort);
+                            } else if (e.target.textContent == "Open") {
+                                displayStock(data, openSort);
+                            } else if (e.target.textContent == "Close") {
+                                displayStock(data, closeSort);
+                            } else if (e.target.textContent == "High") {
+                                displayStock(data, highSort);
+                            } else {
+                                displayStock(data, lowSort);
+                            }
+
+                        }
+                    });
+                })
+                .catch(error => console.error(error));
         }
     });
 
-    function displayInfo(selectedCompany){
+    function displayStats(stocks) {
+        document.querySelector(".e").style.height = "300px";
+        const stats = [];
+        //volume calculations
+        let averageVolume = 0;
+        stocks.forEach(stock => averageVolume += parseFloat(stock.volume));
+        const sortedByVolume = stocks.sort(volumeSort);
+        stats.push(["Volume:", Math.round(averageVolume / stocks.length),
+            Math.round(parseFloat(sortedByVolume[0].volume)), Math.round(parseFloat(sortedByVolume[sortedByVolume.length - 1].volume))]);
+
+        //open calculations
+        let averageOpen = 0;
+        stocks.forEach(stock => averageOpen += parseFloat(stock.open));
+        const sortedByOpen = stocks.sort(openSort);
+        stats.push(["Open:", currency(averageOpen / stocks.length),
+            currency(parseFloat(sortedByOpen[0].open)), currency(parseFloat(sortedByOpen[sortedByOpen.length - 1].open))]);
+
+        //close calculations
+        let averageClose = 0;
+        stocks.forEach(stock => averageClose += parseFloat(stock.close));
+        const sortedByClose = stocks.sort(closeSort);
+        stats.push(["Close:", currency(averageClose / stocks.length),
+            currency(parseFloat(sortedByClose[0].close)), currency(parseFloat(sortedByClose[sortedByClose.length - 1].close))]);
+
+        //high calculations
+        let averageHigh = 0;
+        stocks.forEach(stock => averageHigh += parseFloat(stock.high));
+        const sortedByHigh = stocks.sort(highSort);
+        stats.push(["High:", currency(averageHigh / stocks.length),
+            currency(parseFloat(sortedByHigh[0].high)), currency(parseFloat(sortedByHigh[sortedByHigh.length - 1].high))]);
+
+        //low calculations
+        let averageLow = 0;
+        stocks.forEach(stock => averageLow += parseFloat(stock.low));
+        const sortedByLow = stocks.sort(lowSort);
+        stats.push(["Low:", currency(averageLow / stocks.length),
+            currency(parseFloat(sortedByLow[0].low)), currency(parseFloat(sortedByLow[sortedByHigh.length - 1].low))]);
+
+        const table = document.querySelector("#stats");
+        table.innerHTML = `<tr id="statHeaders"><th>Data Category</th><th>Average</th><th>Maximum</th><th>Minimum</th></tr>`
+        for (let category of stats) {
+            let row = document.createElement("tr");
+            for (let item of category) {
+                let data = document.createElement("td");
+                data.textContent = item;
+                row.appendChild(data);
+            }
+            table.appendChild(row);
+        }
+
+    }
+
+
+    function defaultSort(a, b) {
+        if (new Date(a.date) < new Date(b.date)) {
+            return 1;
+        } else if (new Date(a.date) > new Date(b.date)) {
+            return -1
+        } else
+            return 0;
+    }
+    // function volumeSort(property) {
+    //     let value = property;
+    //     function sortFunction(a, b){
+    //     if (a.value < b.value) {
+    //         return 1;
+    //     } else if (a.value > b.value) {
+    //         return -1
+    //     } else
+    //         return 0;
+    // }
+    // return sortFunction;
+    // }
+
+    function volumeSort(a, b) {
+        if (a.volume < b.volume) {
+            return 1;
+        } else if (a.volume > b.volume) {
+            return -1
+        } else
+            return 0;
+    }
+
+    function openSort(a, b) {
+        if (a.open < b.open) {
+            return 1;
+        } else if (a.open > b.open) {
+            return -1
+        } else
+            return 0;
+    }
+
+    function closeSort(a, b) {
+        if (a.close < b.close) {
+            return 1;
+        } else if (a.close > b.close) {
+            return -1
+        } else
+            return 0;
+    }
+
+    function highSort(a, b) {
+        if (a.high < b.high) {
+            return 1;
+        } else if (a.high > b.high) {
+            return -1
+        } else
+            return 0;
+    }
+
+    function lowSort(a, b) {
+        if (a.low < b.low) {
+            return 1;
+        } else if (a.low > b.low) {
+            return -1
+        } else
+            return 0;
+    }
+
+
+    function displayStock(stocks, sortFunction) {
+        document.querySelector(".d").style.width = "680px";
+        document.querySelector("table").style.overflowY = "scroll";
+        document.querySelector("#stock").innerHTML = `<tr id="stockHeaders">
+        <th>Date</th><th>Volume</th><th>Open</th><th>Close</th><th>High</th><th>Low</th></tr>`;
+        const sortedStock = stocks.sort(sortFunction);
+        const table = document.querySelector("#stock");
+        for (let stock of sortedStock) {
+            let row = document.createElement("tr");
+            for (let item in stock) {
+                if (item == "open" || item == "close" || item == "high" || item == "low") {
+                    let data = document.createElement("td");
+                    data.textContent = currency(stock[item]);
+                    row.appendChild(data);
+                } else if (item == "date") {
+                    let data = document.createElement("td");
+                    data.textContent = new Date(stock[item]);
+                    row.appendChild(data);
+                } else if (item == "volume") {
+                    let data = document.createElement("td");
+                    data.textContent = Math.round(stock[item]);
+                    row.appendChild(data);
+                }
+            }
+            table.appendChild(row);
+        }
+    }
+
+    function displayInfo(selectedCompany) {
         document.querySelector("div.b section").style.display = "flex";
         document.querySelector("#logo").src = `logos/${selectedCompany.symbol}.svg`;
-        console.log(`logos/${selectedCompany.symbol}.svg`);
         document.querySelector("#symbol").textContent = selectedCompany.symbol;
         document.querySelector("#name").textContent = selectedCompany.name;
         document.querySelector("#sub").textContent = selectedCompany.subindustry;
@@ -99,14 +275,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    function displayMap(company){
+    function displayMap(company) {
         let longitude = company.longitude;
         let latitude = company.latitude;
         drawMap(longitude, latitude);
         document.querySelector('#map').style.height = "650px";
-    
+
     }
-    
+
 
     function drawMap(longitude, latitude) {
         map = new google.maps.Map(document.querySelector('#map'), {
@@ -115,6 +291,13 @@ document.addEventListener("DOMContentLoaded", function () {
             zoom: 18
         });
     }
+
+    const currency = function (num) {
+        return new Intl.NumberFormat('en-us', {
+            style: 'currency',
+            currency: 'USD'
+        }).format(num);
+    };
 });
 
-function initMap() {} 
+function initMap() { }
