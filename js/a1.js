@@ -272,9 +272,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     row.appendChild(data);
                 }
             }
-            row.addEventListener("click", event => {
-                showCharts();
-            });
             table.appendChild(row);
         }
     }
@@ -316,7 +313,9 @@ document.addEventListener("DOMContentLoaded", function () {
             currency: 'USD'
         }).format(num);
     };
-
+    document.querySelector('#showCharts').addEventListener("click", event => {
+        showCharts();
+    });
     const showCharts = function () {
         let standardElements = document.querySelectorAll('.defaultView');
         let chartElements = document.querySelectorAll('.chartView');
