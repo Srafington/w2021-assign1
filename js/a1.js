@@ -4,17 +4,21 @@ document.addEventListener("DOMContentLoaded", function () {
     const companyData = 'http://www.randyconnolly.com/funwebdev/3rd/api/stocks/companies.php'
     const stockLink = 'https://www.randyconnolly.com/funwebdev/3rd/api/stocks/history.php?symbol='
 
-    const companies = retrieveStorage();
+    const companies = retrieveStorage('companies');
     const stocks = [];
 
-    function retrieveStorage() {
-        return JSON.parse(localStorage.getItem('companies'))
+    let barChart;
+    let lineChart;
+    let candleChart;
+
+    function retrieveStorage(key) {
+        return JSON.parse(localStorage.getItem(key))
             || [];
     }
 
-    function updateStorage() {
-        localStorage.setItem('companies',
-            JSON.stringify(companies));
+    function updateStorage(key, value) {
+        localStorage.setItem(key,
+            JSON.stringify(value));
     }
 
     // hide form and display loading animation
@@ -32,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.querySelector("#loading").style.display =
                     "none";
                 companies.push(...data);
-                updateStorage();
+                updateStorage('comapnies', companies);
 
 
             })
@@ -81,12 +85,14 @@ document.addEventListener("DOMContentLoaded", function () {
         if (e.target && e.target.nodeName.toLowerCase() == "li") {
             const name = e.target.textContent;
             const selectedCompany = companies.find(company => company.name == name);
+            updateStorage('selectedCompany', selectedCompany);
             displayInfo(selectedCompany);
             displayMap(selectedCompany);
-            const stockData = `${stockLink}${selectedCompany.symbol}`;
-            fetch(stockData)
+            const stockQuery = `${stockLink}${selectedCompany.symbol}`;
+            fetch(stockQuery)
                 .then(response => response.json())
                 .then(data => {
+                    localStorage.setItem('stocks', JSON.stringify(data))
                     displayStock(data, defaultSort);
                     displayStats(data);
                     document.querySelector("#stock").addEventListener('click', function (e) {
@@ -112,6 +118,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 .catch(error => console.error(error));
         }
     });
+
+    // document.querySelector("#toggleCharts").addEventListener("click", function (e) {
+    //     let chartContext = document.getElementById('chart').getContext('2d');
+    //     if(chartContext){
+
+    //         fetch
+    //         barChart = new new Chart(ctx, {});
+    //     }
+    // });
 
     function displayStats(stocks) {
         document.querySelector(".e").style.height = "300px";
@@ -249,7 +264,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     row.appendChild(data);
                 } else if (item == "date") {
                     let data = document.createElement("td");
-                    data.textContent = new Date(stock[item]);
+                    data.textContent = new Date(stock[item]).toDateString();
                     row.appendChild(data);
                 } else if (item == "volume") {
                     let data = document.createElement("td");
@@ -257,6 +272,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     row.appendChild(data);
                 }
             }
+            row.addEventListener("click", event => {
+                showCharts();
+            });
             table.appendChild(row);
         }
     }
@@ -298,6 +316,186 @@ document.addEventListener("DOMContentLoaded", function () {
             currency: 'USD'
         }).format(num);
     };
+
+    const showCharts = function () {
+        let standardElements = document.querySelectorAll('.defaultView');
+        let chartElements = document.querySelectorAll('.chartView');
+        standardElements.forEach((element) => {
+            element.style = 'display: none';
+        });
+        chartElements.forEach((element) => {
+            element.style = 'display: block';
+        });
+        document.querySelector('#closeCharts').addEventListener('click',(event) => {
+            hideCharts();
+        });
+        let companyData = retrieveStorage('selectedCompany');
+        let companyBoxTitle = document.querySelector('.g h2');
+        let companyBoxDesciption = document.querySelector('.g p');
+        companyBoxTitle.textContent=`${companyData.name} - ${companyData.symbol}`;
+        companyBoxDesciption.textContent = companyData.description;
+        drawCharts(companyData);
+
+    };
+    const hideCharts = function () {
+        let standardElements = document.querySelectorAll('.defaultView');
+        let chartElements = document.querySelectorAll('.chartView');
+        standardElements.forEach((element) => {
+            element.style = 'display: block';
+        });
+        chartElements.forEach((element) => {
+            element.style = 'display: none';
+        });
+        barChart.destroy();
+    };
+    const drawCharts = function (companyData) {
+        let barChartContext = document.querySelector('#barChart').getContext('2d');
+        if (barChartContext) {
+            drawBarChart(barChartContext, companyData.financials);
+        }
+        //next two are placeholders for now
+        let candleChartContext = document.querySelector('#candleChart').getContext('2d');
+        if (candleChartContext) {
+            drawCandleChart(candleChartContext, companyData.financials);
+        }
+        let lineChartContext = document.querySelector('#lineChart').getContext('2d');
+        if (lineChartContext) {
+            drawLineChart(lineChartContext, companyData.financials);
+        }
+
+
+    };
+
+    const drawBarChart = function (context, financials){
+        barChart = new Chart(context, {
+            type: 'bar',
+            data: {
+                labels: financials.years,
+                datasets: [
+                    {
+                        label: 'Assets',
+                        data: financials.assets,
+                        backgroundColor: '#536DC4',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Earnings',
+                        data: financials.earnings,
+                        backgroundColor: '#91CD71',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Liabilities',
+                        data: financials.liabilities,
+                        backgroundColor: '#F7CA57',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Revenue',
+                        data: financials.revenue,
+                        backgroundColor: '#F5615E',
+                        borderWidth: 1
+                    },
+                ]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    }
+    const drawCandleChart = function (context, financials){
+        candleChart = new Chart(context, {
+            type: 'bar',
+            data: {
+                labels: financials.years,
+                datasets: [
+                    {
+                        label: 'Assets',
+                        data: financials.assets,
+                        backgroundColor: '#536DC4',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Earnings',
+                        data: financials.earnings,
+                        backgroundColor: '#91CD71',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Liabilities',
+                        data: financials.liabilities,
+                        backgroundColor: '#F7CA57',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Revenue',
+                        data: financials.revenue,
+                        backgroundColor: '#F5615E',
+                        borderWidth: 1
+                    },
+                ]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    }
+    const drawLineChart = function (context, financials){
+        lineChart = new Chart(context, {
+            type: 'line',
+            data: {
+                labels: financials.years,
+                datasets: [
+                    {
+                        label: 'Assets',
+                        data: financials.assets,
+                        backgroundColor: '#536DC4',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Earnings',
+                        data: financials.earnings,
+                        backgroundColor: '#91CD71',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Liabilities',
+                        data: financials.liabilities,
+                        backgroundColor: '#F7CA57',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Revenue',
+                        data: financials.revenue,
+                        backgroundColor: '#F5615E',
+                        borderWidth: 1
+                    },
+                ]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    }
+    
 });
 
 function initMap() { }

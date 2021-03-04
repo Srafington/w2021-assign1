@@ -112,10 +112,48 @@ div.b section {
     grid-column: 3 / span 1;
     grid-row: 6 / span 2;
 }
+.f {
+    grid-column: 1 / span 2;
+    grid-row: 3 / span 5;
+
+    
+}
+.g {
+    grid-column: 3 / span 1;
+    grid-row: 3 / span 2;
+}
+.i {
+    grid-column: 3 / span 1;
+    grid-row: 5 / span 2;
+}
 fieldset{
     border: none;
 }
 #logo {
     max-width: 100%;
     max-height: 15em;
+}
+
+.defaultView {
+    display: block;
+}
+.chartView {
+    display: none;
+}
+
+#bar-container{
+    position: relative;
+    width: 48%;
+    display: inline-block;
+    
+}
+#candle-container{
+    position: relative;
+    width: 48%;
+    display: inline-block;
+}
+#line-container{
+    position: relative;
+    width: 100%
+    display: inline-block;
 }

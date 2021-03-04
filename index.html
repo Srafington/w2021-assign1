@@ -7,7 +7,8 @@
 
     <link rel="stylesheet" href="css/a1.css">
     <link rel="shortcut icon" href="#">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
+    <script src="./js/chart.min.js"></script>
+    <script src="./js/chartjs-chart-financial.min.js" ></script>
 </head>
 
 <body>
@@ -16,7 +17,7 @@
         <div class="box h">
             <h2>Header</h2>
         </div>
-        <div class="box a">
+        <div class="box a defaultView">
             <h2>List of Companies</h2>
             <div id="loading"></div>
             <form class=textbox>
@@ -29,7 +30,7 @@
                 </fieldset>
             </form>
         </div>
-        <div class="box b">
+        <div class="box b defaultView">
             <h2>Company Information</h2>
             <section>
                 <img id="logo">
@@ -51,11 +52,11 @@
                 <span id="description"></span>
             </section>
         </div>
-        <div class="box c">
+        <div class="box c defaultView">
             <h2>Map</h2>
             <div id="map"></div>
         </div>
-        <div class="box d">
+        <div class="box d defaultView">
             <h2>Stock Data</h2>
             <table id="stock">
                 <tr id="stockHeaders">
@@ -68,7 +69,7 @@
                 </tr>
             </table>
         </div>
-        <div class="box e">
+        <div class="box e defaultView">
             <h2>Stock Statistics</h2>
             <table id="stats">
                 <tr id="statHeaders">
@@ -78,6 +79,28 @@
                     <th>Minimum</th>
                 </tr>
             </table>
+        </div>
+        <div class="box f chartView">
+            <div id="bar-container">
+                <canvas id="barChart"></canvas>
+            </div>
+            <div id="candle-container">
+                <canvas id="candleChart"></canvas>
+            </div>
+            <div id="line-container">
+                <canvas id="lineChart"></canvas>
+            </div>
+        </div>
+        <div class="box g chartView">
+            <h2></h2>
+            <p></p>
+            <span><input type="button" id="closeCharts" value="Close"></span>
+        </div>
+        <div class="box i chartView">
+            <h2>
+                Financials
+            </h2>
+            
         </div>
 
     </main>
