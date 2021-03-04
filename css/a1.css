@@ -152,8 +152,9 @@ fieldset{
     width: 48%;
     display: inline-block;
 }
+
 #line-container{
     position: relative;
-    width: 100%
+    width: 100%;
     display: inline-block;
 }
