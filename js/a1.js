@@ -462,25 +462,32 @@ document.addEventListener("DOMContentLoaded", function () {
                         label: 'Assets',
                         data: financials.assets,
                         backgroundColor: '#536DC4',
+                        borderColor: '#536DC4',
                         borderWidth: 1
                     },
                     {
                         label: 'Earnings',
                         data: financials.earnings,
                         backgroundColor: '#91CD71',
+                        borderColor: '#91CD71',
                         borderWidth: 1
+                        
                     },
                     {
                         label: 'Liabilities',
                         data: financials.liabilities,
                         backgroundColor: '#F7CA57',
+                        borderColor: '#F7CA57',
                         borderWidth: 1
+                        
                     },
                     {
                         label: 'Revenue',
                         data: financials.revenue,
                         backgroundColor: '#F5615E',
+                        borderColor: '#F5615E',
                         borderWidth: 1
+                        
                     },
                 ]
             },
