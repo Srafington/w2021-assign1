@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
             fetch(stockQuery)
                 .then(response => response.json())
                 .then(data => {
-                    localStorage.setItem('stocks', JSON.stringify(data))
+                    updateStorage('stocks', data);
                     displayStock(data, defaultSort);
                     displayStats(data);
                     document.querySelector("#stock").addEventListener('click', function (e) {
@@ -325,13 +325,13 @@ document.addEventListener("DOMContentLoaded", function () {
         chartElements.forEach((element) => {
             element.style = 'display: block';
         });
-        document.querySelector('#closeCharts').addEventListener('click',(event) => {
+        document.querySelector('#closeCharts').addEventListener('click', (event) => {
             hideCharts();
         });
         let companyData = retrieveStorage('selectedCompany');
         let companyBoxTitle = document.querySelector('.g h2');
         let companyBoxDesciption = document.querySelector('.g p');
-        companyBoxTitle.textContent=`${companyData.name} - ${companyData.symbol}`;
+        companyBoxTitle.textContent = `${companyData.name} - ${companyData.symbol}`;
         companyBoxDesciption.textContent = companyData.description;
         drawCharts(companyData);
 
@@ -346,6 +346,8 @@ document.addEventListener("DOMContentLoaded", function () {
             element.style = 'display: none';
         });
         barChart.destroy();
+        candleChart.destroy();
+        lineChart.destroy();
     };
     const drawCharts = function (companyData) {
         let barChartContext = document.querySelector('#barChart').getContext('2d');
@@ -355,7 +357,7 @@ document.addEventListener("DOMContentLoaded", function () {
         //next two are placeholders for now
         let candleChartContext = document.querySelector('#candleChart').getContext('2d');
         if (candleChartContext) {
-            drawCandleChart(candleChartContext, companyData.financials);
+            drawCandleChart(candleChartContext, retrieveStorage('stocks'));
         }
         let lineChartContext = document.querySelector('#lineChart').getContext('2d');
         if (lineChartContext) {
@@ -365,7 +367,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     };
 
-    const drawBarChart = function (context, financials){
+    const drawBarChart = function (context, financials) {
         barChart = new Chart(context, {
             type: 'bar',
             data: {
@@ -408,50 +410,73 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
-    const drawCandleChart = function (context, financials){
+
+
+    const drawCandleChart = function (context, stocks) {
+        let min = getCandle(stocks, Math.min, 1);
+        let max = getCandle(stocks, Math.max, 2);
+        // let max = getCandle(stocks, 'close');
+        let avg = getCandle(stocks, (...arguments) => arguments.reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / arguments.length, 3);
+
+        // let dataArray = [open, close, low, high];
+        console.log(avg)
         candleChart = new Chart(context, {
-            type: 'bar',
+            type: 'candlestick',
             data: {
-                labels: financials.years,
                 datasets: [
                     {
-                        label: 'Assets',
-                        data: financials.assets,
-                        backgroundColor: '#536DC4',
-                        borderWidth: 1
+                        label: 'Minimum OCLH',
+                        data: [min, min]
                     },
                     {
-                        label: 'Earnings',
-                        data: financials.earnings,
-                        backgroundColor: '#91CD71',
-                        borderWidth: 1
+                        label: 'Maximum OCLH',
+                        data: [max, max],
                     },
                     {
-                        label: 'Liabilities',
-                        data: financials.liabilities,
-                        backgroundColor: '#F7CA57',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Revenue',
-                        data: financials.revenue,
-                        backgroundColor: '#F5615E',
-                        borderWidth: 1
-                    },
+                        label: 'Average OCLH',
+                        data: [avg, avg],
+                    }
                 ]
             },
             options: {
                 scales: {
                     yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
+                        type: 'Logarithmic'
                     }]
                 }
-            }
+            } 
         });
     }
-    const drawLineChart = function (context, financials){
+
+    const getCandle = function (stock, aggregationFunction, pos) {
+
+        const getMap = (key) => {
+            return stock.map(val => val[key]);
+        }
+        // let values = stock.map(val => val[key]);
+        // let pos = Object.keys(stock[0]).indexOf(key) + 1;
+        // return {
+        //     "t": pos,
+        //     "l": Math.min(...values).toFixed(2),
+        //     "h": Math.max(...values).toFixed(2),
+        //     "o": (values.reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / values.length).toFixed(2),
+        //     "c": (values.reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / values.length).toFixed(2)
+        // };
+        return {
+            "t": pos,
+            "l": aggregationFunction(...getMap('low')),
+            "h": aggregationFunction(...getMap('high')),
+            "o": aggregationFunction(...getMap('open')),
+            "c": aggregationFunction(...getMap('close'))
+        };
+
+    }
+
+
+
+
+
+    const drawLineChart = function (context, financials) {
         lineChart = new Chart(context, {
             type: 'line',
             data: {
@@ -470,7 +495,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         backgroundColor: '#91CD71',
                         borderColor: '#91CD71',
                         borderWidth: 1
-                        
+
                     },
                     {
                         label: 'Liabilities',
@@ -478,7 +503,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         backgroundColor: '#F7CA57',
                         borderColor: '#F7CA57',
                         borderWidth: 1
-                        
+
                     },
                     {
                         label: 'Revenue',
@@ -486,7 +511,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         backgroundColor: '#F5615E',
                         borderColor: '#F5615E',
                         borderWidth: 1
-                        
+
                     },
                 ]
             },
@@ -501,7 +526,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
-    
+
 });
 
 function initMap() { }
