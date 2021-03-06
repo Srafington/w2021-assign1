@@ -351,13 +351,13 @@ document.addEventListener("DOMContentLoaded", function () {
         lineChart.destroy();
     };
 
-    const displayFinancials = function(companyData){
+    const displayFinancials = function (companyData) {
         const financialsTable = document.querySelector('.i table');
         const tableHeader = financialsTable.querySelector('#tableHeader');
         financialsTable.innerHTML = '';
         financialsTable.appendChild(tableHeader);
         console.log(companyData.financials)
-        for(let i = 0; i < companyData.financials.years.length; i++) {
+        for (let i = 0; i < companyData.financials.years.length; i++) {
             let tableRow = document.createElement('tr');
             tableRow.appendChild(createTableCell(companyData.financials.years[i]));
             tableRow.appendChild(createTableCell(companyData.financials.revenue[i]));
@@ -376,18 +376,19 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const drawCharts = function (companyData) {
-        let barChartContext = document.querySelector('#barChart').getContext('2d');
+        const barChartContext = document.querySelector('#barChart').getContext('2d');
+        const stocks = retrieveStorage('stocks');
         if (barChartContext) {
             drawBarChart(barChartContext, companyData.financials);
         }
         //next two are placeholders for now
-        let candleChartContext = document.querySelector('#candleChart').getContext('2d');
+        const candleChartContext = document.querySelector('#candleChart').getContext('2d');
         if (candleChartContext) {
-            drawCandleChart(candleChartContext, retrieveStorage('stocks'));
+            drawCandleChart(candleChartContext, stocks);
         }
-        let lineChartContext = document.querySelector('#lineChart').getContext('2d');
+        const lineChartContext = document.querySelector('#lineChart').getContext('2d');
         if (lineChartContext) {
-            drawLineChart(lineChartContext, companyData.financials);
+            drawLineChart(lineChartContext, stocks);
         }
 
 
@@ -470,15 +471,15 @@ document.addEventListener("DOMContentLoaded", function () {
                         type: 'Logarithmic'
                     }]
                 }
-            } 
+            }
         });
     }
 
+    const getMap = (stock, key) => {
+        return stock.map(val => val[key]);
+    }
     const getCandle = function (stock, aggregationFunction, pos) {
-
-        const getMap = (key) => {
-            return stock.map(val => val[key]);
-        }
+        console.log(stock)
         // let values = stock.map(val => val[key]);
         // let pos = Object.keys(stock[0]).indexOf(key) + 1;
         // return {
@@ -490,10 +491,10 @@ document.addEventListener("DOMContentLoaded", function () {
         // };
         return {
             "t": pos,
-            "l": aggregationFunction(...getMap('low')),
-            "h": aggregationFunction(...getMap('high')),
-            "o": aggregationFunction(...getMap('open')),
-            "c": aggregationFunction(...getMap('close'))
+            "l": aggregationFunction(...getMap(stock, 'low')),
+            "h": aggregationFunction(...getMap(stock, 'high')),
+            "o": aggregationFunction(...getMap(stock, 'open')),
+            "c": aggregationFunction(...getMap(stock, 'close'))
         };
 
     }
@@ -502,52 +503,52 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-    const drawLineChart = function (context, financials) {
+    const drawLineChart = function (context, stocks) {
+        const series1 = getMap(stocks, 'volume');
+        const series2 = getMap(stocks, 'open');
+        const labelSeries = getMap(stocks, 'date')
+
         lineChart = new Chart(context, {
             type: 'line',
             data: {
-                labels: financials.years,
+                labels: labelSeries,
                 datasets: [
                     {
-                        label: 'Assets',
-                        data: financials.assets,
+                        label: 'Volume',
+                        data: series1,
                         backgroundColor: '#536DC4',
                         borderColor: '#536DC4',
-                        borderWidth: 1
+                        borderWidth: 1,
+                        yAxisID: 'y1'
                     },
                     {
-                        label: 'Earnings',
-                        data: financials.earnings,
+                        label: 'Open',
+                        data: series2,
                         backgroundColor: '#91CD71',
                         borderColor: '#91CD71',
-                        borderWidth: 1
+                        borderWidth: 1,
+                        yAxisID: 'y2'
 
-                    },
-                    {
-                        label: 'Liabilities',
-                        data: financials.liabilities,
-                        backgroundColor: '#F7CA57',
-                        borderColor: '#F7CA57',
-                        borderWidth: 1
-
-                    },
-                    {
-                        label: 'Revenue',
-                        data: financials.revenue,
-                        backgroundColor: '#F5615E',
-                        borderColor: '#F5615E',
-                        borderWidth: 1
-
-                    },
+                    }
                 ]
             },
             options: {
                 scales: {
-                    yAxes: [{
+                    y1: {
+                        position: 'left',
                         ticks: {
-                            beginAtZero: true
+                            beginAtZero: true,
                         }
-                    }]
+                    },
+                    y2: {
+                        position: 'right',
+                        gridLines: {
+                                    drawOnChartArea: false, // only want the grid lines for one axis to show up
+                        },
+                        ticks: {
+                                    beginAtZero: true,
+                        }
+                    }
                 }
             }
         });
