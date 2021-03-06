@@ -333,6 +333,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let companyBoxDesciption = document.querySelector('.g p');
         companyBoxTitle.textContent = `${companyData.name} - ${companyData.symbol}`;
         companyBoxDesciption.textContent = companyData.description;
+        displayFinancials(companyData);
         drawCharts(companyData);
 
     };
@@ -349,6 +350,31 @@ document.addEventListener("DOMContentLoaded", function () {
         candleChart.destroy();
         lineChart.destroy();
     };
+
+    const displayFinancials = function(companyData){
+        const financialsTable = document.querySelector('.i table');
+        const tableHeader = financialsTable.querySelector('#tableHeader');
+        financialsTable.innerHTML = '';
+        financialsTable.appendChild(tableHeader);
+        console.log(companyData.financials)
+        for(let i = 0; i < companyData.financials.years.length; i++) {
+            let tableRow = document.createElement('tr');
+            tableRow.appendChild(createTableCell(companyData.financials.years[i]));
+            tableRow.appendChild(createTableCell(companyData.financials.revenue[i]));
+            tableRow.appendChild(createTableCell(companyData.financials.earnings[i]));
+            tableRow.appendChild(createTableCell(companyData.financials.assets[i]));
+            tableRow.appendChild(createTableCell(companyData.financials.liabilities[i]));
+            financialsTable.appendChild(tableRow);
+        }
+
+    }
+
+    const createTableCell = function (value) {
+        const tableCell = document.createElement('td');
+        tableCell.textContent = value;
+        return tableCell;
+    }
+
     const drawCharts = function (companyData) {
         let barChartContext = document.querySelector('#barChart').getContext('2d');
         if (barChartContext) {
