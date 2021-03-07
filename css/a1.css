@@ -158,3 +158,6 @@ fieldset{
     width: 100%;
     display: inline-block;
 }
+#showCharts {
+    display: none;
+}

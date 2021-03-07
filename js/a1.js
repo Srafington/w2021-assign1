@@ -254,6 +254,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelector("#stock").innerHTML = `<tr id="stockHeaders">
         <th>Date</th><th>Volume</th><th>Open</th><th>Close</th><th>High</th><th>Low</th></tr>`;
         const sortedStock = stocks.sort(sortFunction);
+        document.querySelector("#showCharts").style = "display: inline";
         const table = document.querySelector("#stock");
         for (let stock of sortedStock) {
             let row = document.createElement("tr");
@@ -328,12 +329,17 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelector('#closeCharts').addEventListener('click', (event) => {
             hideCharts();
         });
+        
         let companyData = retrieveStorage('selectedCompany');
         let companyBoxTitle = document.querySelector('.g h2');
         let companyBoxDesciption = document.querySelector('.g p');
         companyBoxTitle.textContent = `${companyData.name} - ${companyData.symbol}`;
         companyBoxDesciption.textContent = companyData.description;
         displayFinancials(companyData);
+        document.querySelector('#readAloud').addEventListener('click', () => {
+            const utterance = new SpeechSynthesisUtterance(companyData.description);
+            speechSynthesis.speak(utterance);
+        });
         drawCharts(companyData);
 
     };
@@ -357,13 +363,22 @@ document.addEventListener("DOMContentLoaded", function () {
         financialsTable.innerHTML = '';
         financialsTable.appendChild(tableHeader);
         console.log(companyData.financials)
-        for (let i = 0; i < companyData.financials.years.length; i++) {
+        if (companyData.financials) {
+            for (let i = 0; i < companyData.financials.years.length; i++) {
+                let tableRow = document.createElement('tr');
+                tableRow.appendChild(createTableCell(companyData.financials.years[i]));
+                tableRow.appendChild(createTableCell(companyData.financials.revenue[i]));
+                tableRow.appendChild(createTableCell(companyData.financials.earnings[i]));
+                tableRow.appendChild(createTableCell(companyData.financials.assets[i]));
+                tableRow.appendChild(createTableCell(companyData.financials.liabilities[i]));
+                financialsTable.appendChild(tableRow);
+            }
+        } else {
             let tableRow = document.createElement('tr');
-            tableRow.appendChild(createTableCell(companyData.financials.years[i]));
-            tableRow.appendChild(createTableCell(companyData.financials.revenue[i]));
-            tableRow.appendChild(createTableCell(companyData.financials.earnings[i]));
-            tableRow.appendChild(createTableCell(companyData.financials.assets[i]));
-            tableRow.appendChild(createTableCell(companyData.financials.liabilities[i]));
+            let cell = createTableCell("No data to show");
+            cell.colSpan = 5;
+            cell.style = "text-align: center;"
+            tableRow.appendChild(cell);
             financialsTable.appendChild(tableRow);
         }
 
@@ -395,47 +410,75 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     const drawBarChart = function (context, financials) {
-        barChart = new Chart(context, {
-            type: 'bar',
-            data: {
-                labels: financials.years,
-                datasets: [
-                    {
-                        label: 'Assets',
-                        data: financials.assets,
-                        backgroundColor: '#536DC4',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Earnings',
-                        data: financials.earnings,
-                        backgroundColor: '#91CD71',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Liabilities',
-                        data: financials.liabilities,
-                        backgroundColor: '#F7CA57',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Revenue',
-                        data: financials.revenue,
-                        backgroundColor: '#F5615E',
-                        borderWidth: 1
-                    },
-                ]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
+        if (financials) {
+            barChart = new Chart(context, {
+                type: 'bar',
+                data: {
+                    labels: financials.years,
+                    datasets: [
+                        {
+                            label: 'Assets',
+                            data: financials.assets,
+                            backgroundColor: '#536DC4',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Earnings',
+                            data: financials.earnings,
+                            backgroundColor: '#91CD71',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Liabilities',
+                            data: financials.liabilities,
+                            backgroundColor: '#F7CA57',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Revenue',
+                            data: financials.revenue,
+                            backgroundColor: '#F5615E',
+                            borderWidth: 1
+                        },
+                    ]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            barChart = new Chart(context, {
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'No Financial History Available',
+                            padding: 100,
+                            font: {
+                                size: 20,
+                                family: "'Comfortaa', sans-serif"
+                            }
+                        }
+                    }
+                }
+                // type: 'bar',
+                // data: {
+                //     datasets: [
+                //         {
+                //             data: [],
+                //             backgroundColor: '#536DC4',
+                //             borderWidth: 1
+                //         }
+                //     ]
+                // }
+            });
+        }
     }
 
 
@@ -543,10 +586,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     y2: {
                         position: 'right',
                         gridLines: {
-                                    drawOnChartArea: false, // only want the grid lines for one axis to show up
+                            drawOnChartArea: false, // only want the grid lines for one axis to show up
                         },
                         ticks: {
-                                    beginAtZero: true,
+                            beginAtZero: true,
                         }
                     }
                 }
