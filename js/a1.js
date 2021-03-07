@@ -329,7 +329,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelector('#closeCharts').addEventListener('click', (event) => {
             hideCharts();
         });
-        
+
         let companyData = retrieveStorage('selectedCompany');
         let companyBoxTitle = document.querySelector('.g h2');
         let companyBoxDesciption = document.querySelector('.g p');
@@ -467,53 +467,74 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
                     }
                 }
-                // type: 'bar',
-                // data: {
-                //     datasets: [
-                //         {
-                //             data: [],
-                //             backgroundColor: '#536DC4',
-                //             borderWidth: 1
-                //         }
-                //     ]
-                // }
+
             });
         }
     }
 
 
     const drawCandleChart = function (context, stocks) {
-        let min = getCandle(stocks, Math.min, 1);
-        let max = getCandle(stocks, Math.max, 2);
-        // let max = getCandle(stocks, 'close');
-        let avg = getCandle(stocks, (...arguments) => arguments.reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / arguments.length, 3);
-
-        // let dataArray = [open, close, low, high];
-        console.log(avg)
+        // let min = getCandle(stocks, Math.min, 1);
+        // let max = getCandle(stocks, Math.max, 2);
+        // let avg = getCandle(stocks, (...arguments) => arguments.reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / arguments.length, 3);
+        // let none = {
+        //     "t": 0,
+        //     "l": 0,
+        //     "h": 0,
+        //     "o": 0,
+        //     "c": 0
+        // }
+        // candleChart = new Chart(context, {
+        //     type: 'candlestick',
+        //     data: {
+        //         datasets: [
+        //             {
+        //                 label: 'Minimum OCLH',
+        //                 data: [min, min],
+        //                 backgroundColor: min.o > min.c ? "#FF4444" : "#44FF44",
+        //                 borderColor: min.o > min.c ? "#FF4444" : "#44FF44"
+        //             },
+        //             {
+        //                 label: 'Maximum OCLH',
+        //                 data: [min, max],
+        //                 backgroundColor: max.o > max.c ? "#FF4444" : "#44FF44",
+        //                 borderColor: max.o > max.c ? "#FF4444" : "#44FF44"
+        //             },
+        //             {
+        //                 label: 'Average OCLH',
+        //                 data: [min, avg],
+        //                 backgroundColor: avg.o > avg.c ? "#FF4444" : "#44FF44",
+        //                 borderColor: avg.o > avg.c ? "#FF4444" : "#44FF44"
+        //             }
+        //         ]
+        //     }
+        // });
+        console.log(stocks)
+        let data = stocks.map((stock) => {
+            return {
+                "t": (new Date(stock.date)).valueOf(),
+                "l": stock.low,
+                "h": stock.high,
+                "o": stock.open,
+                "c": stock.close
+            }
+        });
+        console.log(data)
         candleChart = new Chart(context, {
             type: 'candlestick',
             data: {
                 datasets: [
                     {
-                        label: 'Minimum OCLH',
-                        data: [min, min]
-                    },
-                    {
-                        label: 'Maximum OCLH',
-                        data: [max, max],
-                    },
-                    {
-                        label: 'Average OCLH',
-                        data: [avg, avg],
+                        label: 'Data',
+                        data: data,
+                        // borderColor: min.o > min.c ? "#FF4444" : "#44FF44"
+                        color: {
+                            up: '#44FF44',
+                            down: '#FF4444',
+                            unchanged: '#999'
+                        }
                     }
                 ]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        type: 'Logarithmic'
-                    }]
-                }
             }
         });
     }
@@ -522,16 +543,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return stock.map(val => val[key]);
     }
     const getCandle = function (stock, aggregationFunction, pos) {
-        console.log(stock)
-        // let values = stock.map(val => val[key]);
-        // let pos = Object.keys(stock[0]).indexOf(key) + 1;
-        // return {
-        //     "t": pos,
-        //     "l": Math.min(...values).toFixed(2),
-        //     "h": Math.max(...values).toFixed(2),
-        //     "o": (values.reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / values.length).toFixed(2),
-        //     "c": (values.reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / values.length).toFixed(2)
-        // };
         return {
             "t": pos,
             "l": aggregationFunction(...getMap(stock, 'low')),
