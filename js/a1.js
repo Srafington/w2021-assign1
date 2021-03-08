@@ -44,6 +44,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 5000);
     });
 
+    /**
+     * Event listener for the clear button
+     */
+    document.querySelector("#clearButton").addEventListener('click', function(){
+        document.querySelector("#companyList").innerHTML = "";
+        displayCompanies();
+    });
+
     //keyboard event handlers
     const searchBox = document.querySelector('.search');
     searchBox.addEventListener('keyup', displayMatches);
@@ -91,6 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelector("#loading").style.display = "none";
         displayCompanies();
     }
+
 
     /**
      * Displays companies in the list
