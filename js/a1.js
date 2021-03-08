@@ -261,7 +261,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     function displayStock(stocks, sortFunction) {
-        document.querySelector(".d").style.width = "550px";
         document.querySelector("table").style.overflowY = "scroll";
         document.querySelector("#stock").innerHTML = `<tr id="stockHeaders">
         <th>Date</th><th>Volume</th><th>Open</th><th>Close</th><th>High</th><th>Low</th></tr>`;
