@@ -5,11 +5,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const stockLink = 'https://www.randyconnolly.com/funwebdev/3rd/api/stocks/history.php?symbol='
 
     const companies = retrieveStorage('companies');
-<<<<<<< HEAD
-=======
 
     let companyDesc = '';
->>>>>>> d601ca680970e09d44d1b9a3d1811da199ef78a2
 
     let barChart;
     let lineChart;
@@ -34,24 +31,6 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelector("form.textbox").style.display = "none";
         document.querySelector("#loading").style.display = "block";
         fetch(companyData)
-<<<<<<< HEAD
-            .then(response => {
-                if (response.ok) {
-                    return response.json().then(data => {
-                        document.querySelector("form.textbox").style.display =
-                            "block";
-                        document.querySelector("#loading").style.display =
-                            "none";
-                        companies.push(...data);
-                        updateStorage('comapnies', companies);
-                    });
-                } else {
-                    return Promise.reject({
-                        status: response.status,
-                        statusText: response.statusText
-                    })
-                };
-=======
             .then(response => response.json())
             .then(data => {
 
@@ -63,7 +42,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 updateStorage('comapnies', companies);
                 displayCompanies();
 
->>>>>>> d601ca680970e09d44d1b9a3d1811da199ef78a2
             })
             .catch(error => console.error(error));
     } else {
