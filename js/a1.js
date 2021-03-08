@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
 
     // the URL for our data
-    const companyData = 'http://www.randyconnolly.com/funwebdev/3rd/api/stocks/companies.php'
+    const companyData = 'https://www.randyconnolly.com/funwebdev/3rd/api/stocks/companies.php'
     const stockLink = 'https://www.randyconnolly.com/funwebdev/3rd/api/stocks/history.php?symbol='
 
     const companies = retrieveStorage('companies');
