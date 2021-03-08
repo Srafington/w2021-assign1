@@ -126,6 +126,7 @@ div.b section {
     grid-column: 3 / span 1;
     grid-row: 5 / span 2;
 }
+
 fieldset{
     border: none;
 }

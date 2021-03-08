@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const stockLink = 'https://www.randyconnolly.com/funwebdev/3rd/api/stocks/history.php?symbol='
 
     const companies = retrieveStorage('companies');
-    const stocks = [];
 
     let barChart;
     let lineChart;
