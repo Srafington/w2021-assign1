@@ -44,10 +44,9 @@ h2 {
 }
 
 #stock {
-  display: block;
+  /* display: block; */
   overflow-y: scroll;
-  height: fit-content;
-  max-height: 850px;
+  height: 80%;
 }
 
 ul#companyList li {
@@ -81,6 +80,7 @@ div.b section label {
   border-radius: 5px;
   max-width: 100%;
   box-shadow: 4px 4px 3px -1px var(--shadow);
+  max-height: 300px;
 }
 
 .box {
@@ -116,7 +116,7 @@ div.b section label {
 .d {
   grid-column: 3 / span 1;
   grid-row: 2 / span 4;
-  max-height: 1000px;
+  max-height: 800px;
 }
 
 .e {
@@ -187,12 +187,14 @@ table {
   padding: 1em;
   width: 100%;
   overflow-y: scroll;
+  display: table;
 }
+
 tr:nth-child(even) {
   background: #ddd;
 }
 td {
-  padding: 5px 8px;
+  padding: 5px 10px;
 }
 
 #stock,
