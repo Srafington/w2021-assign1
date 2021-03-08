@@ -28,17 +28,22 @@ document.addEventListener("DOMContentLoaded", function () {
     // fetch from API and save to local storage if companies is empty
     if (companies.length == 0) {
         fetch(companyData)
-            .then(response => response.json())
-            .then(data => {
-
-                document.querySelector("form.textbox").style.display =
-                    "block";
-                document.querySelector("#loading").style.display =
-                    "none";
-                companies.push(...data);
-                updateStorage('comapnies', companies);
-
-
+            .then(response => {
+                if (response.ok) {
+                    return response.json().then(data => {
+                        document.querySelector("form.textbox").style.display =
+                            "block";
+                        document.querySelector("#loading").style.display =
+                            "none";
+                        companies.push(...data);
+                        updateStorage('comapnies', companies);
+                    });
+                } else {
+                    return Promise.reject({
+                        status: response.status,
+                        statusText: response.statusText
+                    })
+                };
             })
             .catch(error => console.error(error));
     } else {
@@ -90,30 +95,38 @@ document.addEventListener("DOMContentLoaded", function () {
             displayMap(selectedCompany);
             const stockQuery = `${stockLink}${selectedCompany.symbol}`;
             fetch(stockQuery)
-                .then(response => response.json())
-                .then(data => {
-                    updateStorage('stocks', data);
-                    displayStock(data, defaultSort);
-                    displayStats(data);
-                    document.querySelector("#stock").addEventListener('click', function (e) {
+                .then(response => {
+                    if (response.ok) {
+                        return response.json().then(data => {
+                            updateStorage('stocks', data);
+                            displayStock(data, defaultSort);
+                            displayStats(data);
+                            document.querySelector("#stock").addEventListener('click', function (e) {
 
-                        if (e.target && e.target.nodeName.toLowerCase() == "th") {
-                            if (e.target.textContent == "Date") {
-                                displayStock(data, defaultSort);
-                            } else if (e.target.textContent == "Volume") {
-                                displayStock(data, volumeSort);
-                            } else if (e.target.textContent == "Open") {
-                                displayStock(data, openSort);
-                            } else if (e.target.textContent == "Close") {
-                                displayStock(data, closeSort);
-                            } else if (e.target.textContent == "High") {
-                                displayStock(data, highSort);
-                            } else {
-                                displayStock(data, lowSort);
-                            }
+                                if (e.target && e.target.nodeName.toLowerCase() == "th") {
+                                    if (e.target.textContent == "Date") {
+                                        displayStock(data, defaultSort);
+                                    } else if (e.target.textContent == "Volume") {
+                                        displayStock(data, volumeSort);
+                                    } else if (e.target.textContent == "Open") {
+                                        displayStock(data, openSort);
+                                    } else if (e.target.textContent == "Close") {
+                                        displayStock(data, closeSort);
+                                    } else if (e.target.textContent == "High") {
+                                        displayStock(data, highSort);
+                                    } else {
+                                        displayStock(data, lowSort);
+                                    }
 
-                        }
-                    });
+                                }
+                            });
+                        })
+                    } else {
+                        return Promise.reject({
+                            status: response.status,
+                            statusText: response.statusText
+                        })
+                    };
                 })
                 .catch(error => console.error(error));
         }
