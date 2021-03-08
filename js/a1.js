@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const stockLink = 'https://www.randyconnolly.com/funwebdev/3rd/api/stocks/history.php?symbol='
 
     const companies = retrieveStorage('companies');
-    
+
     let companyDesc = '';
 
     let barChart;
@@ -28,6 +28,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // fetch from API and save to local storage if companies is empty
     if (companies.length == 0) {
+        document.querySelector("form.textbox").style.display = "none";
+        document.querySelector("#loading").style.display = "block";
         fetch(companyData)
             .then(response => response.json())
             .then(data => {
@@ -38,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     "none";
                 companies.push(...data);
                 updateStorage('comapnies', companies);
-
+                displayCompanies();
 
             })
             .catch(error => console.error(error));
@@ -46,8 +48,8 @@ document.addEventListener("DOMContentLoaded", function () {
         //show form as no need to retrieve info
         document.querySelector("form.textbox").style.display = "block";
         document.querySelector("#loading").style.display = "none";
+        displayCompanies();
     }
-    displayCompanies();
 
 
     function displayCompanies() {
@@ -342,12 +344,12 @@ document.addEventListener("DOMContentLoaded", function () {
         companyBoxTitle.textContent = `${companyData.name} - ${companyData.symbol}`;
         companyBoxDesciption.textContent = companyData.description;
         displayFinancials(companyData);
-        
+
         drawCharts(companyData);
 
     };
 
-    
+
 
     const hideCharts = function () {
         let standardElements = document.querySelectorAll('.defaultView');

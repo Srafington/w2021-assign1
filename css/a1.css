@@ -161,3 +161,8 @@ fieldset{
 #showCharts {
     display: none;
 }
+
+#loading {
+    padding-top: 50px;
+    text-align: center;
+}
