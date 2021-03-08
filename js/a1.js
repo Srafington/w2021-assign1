@@ -385,10 +385,10 @@ document.addEventListener("DOMContentLoaded", function () {
             for (let i = 0; i < companyData.financials.years.length; i++) {
                 let tableRow = document.createElement('tr');
                 tableRow.appendChild(createTableCell(companyData.financials.years[i]));
-                tableRow.appendChild(createTableCell(companyData.financials.revenue[i]));
-                tableRow.appendChild(createTableCell(companyData.financials.earnings[i]));
-                tableRow.appendChild(createTableCell(companyData.financials.assets[i]));
-                tableRow.appendChild(createTableCell(companyData.financials.liabilities[i]));
+                tableRow.appendChild(createTableCell(currency(companyData.financials.revenue[i])));
+                tableRow.appendChild(createTableCell(currency(companyData.financials.earnings[i])));
+                tableRow.appendChild(createTableCell(currency(companyData.financials.assets[i])));
+                tableRow.appendChild(createTableCell(currency(companyData.financials.liabilities[i])));
                 financialsTable.appendChild(tableRow);
             }
         } else {

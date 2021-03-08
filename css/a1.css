@@ -176,15 +176,13 @@ td{
     padding: 5px 8px;
 }
 
-#stock {
-    display: none;
+#stock, #stats, #financials, #company {
     font-size: 14px;
 }
 
-#stats {
+#stats, #stock {
     display: none;
-    font-size: 14px;
-}
+} 
 
 #info label {
     font-weight: bold;
@@ -195,3 +193,4 @@ td{
     font-weight: normal;
     font-size: 15px;
 }
+
