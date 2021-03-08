@@ -29,8 +29,8 @@ h2 {
 
 .search {
   margin-left: 20px;
-  font-size: 14px;
-  padding: 12px 65px 12px 40px;
+  font-size: 13px;
+  padding: 18px 45px 15px 15px;
   /* border: 1px solid rgb(2, 2, 2); */
   margin-bottom: 12px;
 }
@@ -256,6 +256,10 @@ button:active {
   outline: none;
   background-color: rgb(11, 76, 150);
   box-shadow: 2px 2px 3px var(--shadow);
+}
+
+#clearButton {
+    margin-left: 20px;
 }
 
 
