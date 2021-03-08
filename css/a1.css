@@ -194,3 +194,25 @@ td{
     font-size: 15px;
 }
 
+#Credit{
+    font-size: 30px;
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+.dropdown {
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 8px 10px;
+    z-index: 1;
+}
+
+/* credit for dropdown on Credit icon: https://www.w3schools.com/css/css_dropdowns.asp */
+  

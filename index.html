@@ -11,14 +11,22 @@
     <script src="./js/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@0.2.1"></script>
     <script src="./js/chartjs-chart-financial.min.js"></script>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+        integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 </head>
 
 <body>
     <main class="container">
 
         <div class="box h">
-            <h1>Header</h1>
+            <h1>COMP 3512 Assign1</h1>
+            <div class="dropdown">
+                <i id="Credit" class="fas fa-book"></i>
+                <div class="dropdown-content">
+                    <p>Group Members: Jon Axford & Latonia To</p>
+                    <p>Credits for 3rd Party Technology: </p>
+                </div>
+            </div>
         </div>
         <div class="box a defaultView">
             <h1>List of Companies</h1>
@@ -89,14 +97,21 @@
         <div class="box g chartView" id="company">
             <h1></h1>
             <p></p>
-            <span><input type="button" id="readAloud" value="Speak"><input type="button" id="closeCharts" value="Close"></span>
+            <span><input type="button" id="readAloud" value="Speak"><input type="button" id="closeCharts"
+                    value="Close"></span>
         </div>
         <div class="box i chartView">
             <h1>
                 Financials
             </h1>
             <table id="financials">
-                <tr id="tableHeader"><th>Year</th><th>Revenue</th><th>Earnings</th><th>Assets</th><th>Liabilities</th></tr>
+                <tr id="tableHeader">
+                    <th>Year</th>
+                    <th>Revenue</th>
+                    <th>Earnings</th>
+                    <th>Assets</th>
+                    <th>Liabilities</th>
+                </tr>
             </table>
 
         </div>
