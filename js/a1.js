@@ -22,6 +22,15 @@ document.addEventListener("DOMContentLoaded", function () {
             JSON.stringify(value));
     }
 
+    document.querySelector("#dropdown").addEventListener("mouseover", () => {
+        const creditsPane = document.querySelector("#credits-pane");
+        creditsPane.style = "display: block";
+        setTimeout(() => {
+            creditsPane.style = "display: none";
+        }, 5000);
+    });
+
+
     // hide form and display loading animation
     document.querySelector("form.textbox").style.display = "none";
     document.querySelector("#loading").style.display = "block";
@@ -384,7 +393,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const tableHeader = financialsTable.querySelector('#tableHeader');
         financialsTable.innerHTML = '';
         financialsTable.appendChild(tableHeader);
-        console.log(companyData.financials)
         if (companyData.financials) {
             for (let i = 0; i < companyData.financials.years.length; i++) {
                 let tableRow = document.createElement('tr');
@@ -466,11 +474,24 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
                 options: {
                     scales: {
-                        yAxes: [{
+                        y: {
+                            position: 'left',
                             ticks: {
-                                beginAtZero: true
+                                beginAtZero: true,
+                                callback: chartTick
                             }
-                        }]
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Financials',
+                            font: {
+                                size: 16,
+                                family: "'Comfortaa', sans-serif"
+                            }
+                        },
+
                     }
                 }
             });
@@ -531,7 +552,6 @@ document.addEventListener("DOMContentLoaded", function () {
         //         ]
         //     }
         // });
-        console.log(stocks)
         let data = stocks.map((stock) => {
             return {
                 "t": (new Date(stock.date)).valueOf(),
@@ -541,7 +561,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 "c": stock.close
             }
         });
-        console.log(data)
         candleChart = new Chart(context, {
             type: 'candlestick',
             data: {
@@ -561,6 +580,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 plugins: {
                     legend: {
                         display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'OCLH Stock Performance',
+                        font: {
+                            size: 16,
+                            family: "'Comfortaa', sans-serif"
+                        }
                     }
                 }
             }
@@ -620,6 +647,11 @@ document.addEventListener("DOMContentLoaded", function () {
                         position: 'left',
                         ticks: {
                             beginAtZero: true,
+                            callback: chartTick
+                        },
+                        title: {
+                            display: true,
+                            text: 'Volume'
                         }
                     },
                     y2: {
@@ -629,6 +661,24 @@ document.addEventListener("DOMContentLoaded", function () {
                         },
                         ticks: {
                             beginAtZero: true,
+                            callback: chartTick
+                        },
+                        title: {
+                            display: true,
+                            text: 'Opening Value'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Stock History',
+                        font: {
+                            size: 16,
+                            family: "'Comfortaa', sans-serif"
                         }
                     }
                 }
@@ -636,6 +686,16 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+
+    const chartTick = function (value, index, values) {
+        if(value>1000_000){
+            return currency(value/1000_000) + 'M';
+        }
+        if(value>1000){
+            return currency(value/1000) + 'k';
+        }
+        return currency(value);
+    }
 });
 
 function initMap() { }

@@ -20,9 +20,9 @@
 
         <div class="box h" id="header">
             <h1>COMP 3512 Assign1</h1>
-            <div class="dropdown">
+            <div id="dropdown">
                 <i id="Credit" class="fas fa-book"></i>
-                <div class="dropdown-content">
+                <div id="credits-pane" class="box">
                     <p>Group Members: Jon Axford & Latonia To</p>
                     <p>Credits for 3rd Party Technology: </p>
                     <ul>
@@ -31,6 +31,7 @@
                         <li>Luxon and Luxon ChartJS adaptor (Required for ChartJS Financials)</li>
                         <li>FontAwesome 5</li>
                         <li>Google Maps</li>
+                        <li>Google Fonts</li>
                     </ul>
                 </div>
             </div>
@@ -67,7 +68,7 @@
             <div id="map"></div>
         </div>
         <div class="box d defaultView">
-            <h1>Stock Data</h1> <input type="button" id="showCharts" value="Show Charts">
+            <h1>Stock Data</h1> <button id="showCharts" ><i class="fas fa-chart-bar"></i> Show Charts</button>
             <div id="loadingStock">
                 <i class="fas fa-10x fa-spinner fa-pulse"></i>
             </div>
@@ -107,8 +108,8 @@
         <div class="box g chartView" id="company">
             <h1></h1>
             <p></p>
-            <span><input type="button" id="readAloud" value="Speak"><input type="button" id="closeCharts"
-                    value="Close"></span>
+            <span><button id="readAloud" ><i class="far fa-comment"></i> Speak</button>
+                <button id="closeCharts"><i class="far fa-window-close"></i> Close</button></span>
         </div>
         <div class="box i chartView">
             <h1>
