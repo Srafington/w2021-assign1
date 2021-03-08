@@ -218,7 +218,8 @@ td {
 }
 
 #Credit {
-  font-size: 30px;
+  font-size: 35px;
+  padding: 31px 20px 20px 20px;
 }
 
 #dropdown {
@@ -262,4 +263,7 @@ button:active {
     margin-left: 20px;
 }
 
+#header{
+    display: flex;
+}
 
