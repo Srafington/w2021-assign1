@@ -179,6 +179,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const table = document.querySelector("#stats");
         table.innerHTML = `<tr id="statHeaders"><th>Data Category</th><th>Average</th><th>Maximum</th><th>Minimum</th></tr>`
+        table.style.display = "block";
         for (let category of stats) {
             let row = document.createElement("tr");
             for (let item of category) {
@@ -260,13 +261,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     function displayStock(stocks, sortFunction) {
-        document.querySelector(".d").style.width = "680px";
+        document.querySelector(".d").style.width = "550px";
         document.querySelector("table").style.overflowY = "scroll";
         document.querySelector("#stock").innerHTML = `<tr id="stockHeaders">
         <th>Date</th><th>Volume</th><th>Open</th><th>Close</th><th>High</th><th>Low</th></tr>`;
         const sortedStock = stocks.sort(sortFunction);
         document.querySelector("#showCharts").style = "display: inline";
         const table = document.querySelector("#stock");
+        table.style.display = "block";
         for (let stock of sortedStock) {
             let row = document.createElement("tr");
             for (let item in stock) {
@@ -346,7 +348,7 @@ document.addEventListener("DOMContentLoaded", function () {
             element.style = 'display: block';
         });
         let companyData = retrieveStorage('selectedCompany');
-        let companyBoxTitle = document.querySelector('.g h2');
+        let companyBoxTitle = document.querySelector('.g h1');
         let companyBoxDesciption = document.querySelector('.g p');
         companyDesc = companyData.description;
         companyBoxTitle.textContent = `${companyData.name} - ${companyData.symbol}`;
