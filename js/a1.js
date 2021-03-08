@@ -5,7 +5,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const stockLink = 'https://www.randyconnolly.com/funwebdev/3rd/api/stocks/history.php?symbol='
 
     const companies = retrieveStorage('companies');
-    const stocks = [];
+    
+    let companyDesc = '';
 
     let barChart;
     let lineChart;
@@ -317,6 +318,14 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector('#showCharts').addEventListener("click", event => {
         showCharts();
     });
+
+    document.querySelector('#closeCharts').addEventListener('click', (event) => {
+        hideCharts();
+    });
+    document.querySelector('#readAloud').addEventListener('click', () => {
+        const utterance = new SpeechSynthesisUtterance(companyDesc);
+        speechSynthesis.speak(utterance);
+    });
     const showCharts = function () {
         let standardElements = document.querySelectorAll('.defaultView');
         let chartElements = document.querySelectorAll('.chartView');
@@ -326,23 +335,20 @@ document.addEventListener("DOMContentLoaded", function () {
         chartElements.forEach((element) => {
             element.style = 'display: block';
         });
-        document.querySelector('#closeCharts').addEventListener('click', (event) => {
-            hideCharts();
-        });
-
         let companyData = retrieveStorage('selectedCompany');
         let companyBoxTitle = document.querySelector('.g h2');
         let companyBoxDesciption = document.querySelector('.g p');
+        companyDesc = companyData.description;
         companyBoxTitle.textContent = `${companyData.name} - ${companyData.symbol}`;
         companyBoxDesciption.textContent = companyData.description;
         displayFinancials(companyData);
-        document.querySelector('#readAloud').addEventListener('click', () => {
-            const utterance = new SpeechSynthesisUtterance(companyData.description);
-            speechSynthesis.speak(utterance);
-        });
+        
         drawCharts(companyData);
 
     };
+
+    
+
     const hideCharts = function () {
         let standardElements = document.querySelectorAll('.defaultView');
         let chartElements = document.querySelectorAll('.chartView');
@@ -527,7 +533,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     {
                         label: 'Data',
                         data: data,
-                        // borderColor: min.o > min.c ? "#FF4444" : "#44FF44"
                         color: {
                             up: '#44FF44',
                             down: '#FF4444',
@@ -535,6 +540,13 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
                     }
                 ]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
             }
         });
     }
