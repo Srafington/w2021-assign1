@@ -11,6 +11,7 @@
     <script src="./js/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@0.2.1"></script>
     <script src="./js/chartjs-chart-financial.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 </head>
 
 <body>
@@ -21,7 +22,9 @@
         </div>
         <div class="box a defaultView">
             <h2>List of Companies</h2>
-            <div id="loading"></div>
+            <div id="loading">
+                <i class="fas fa-10x fa-spinner fa-pulse"></i>
+            </div>
             <form class=textbox>
                 <fieldset>
                     <input type="text" class="search" placeholder="Type for matching company"

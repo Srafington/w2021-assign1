@@ -5,6 +5,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const stockLink = 'https://www.randyconnolly.com/funwebdev/3rd/api/stocks/history.php?symbol='
 
     const companies = retrieveStorage('companies');
+<<<<<<< HEAD
+=======
+
+    let companyDesc = '';
+>>>>>>> d601ca680970e09d44d1b9a3d1811da199ef78a2
 
     let barChart;
     let lineChart;
@@ -26,7 +31,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // fetch from API and save to local storage if companies is empty
     if (companies.length == 0) {
+        document.querySelector("form.textbox").style.display = "none";
+        document.querySelector("#loading").style.display = "block";
         fetch(companyData)
+<<<<<<< HEAD
             .then(response => {
                 if (response.ok) {
                     return response.json().then(data => {
@@ -43,14 +51,27 @@ document.addEventListener("DOMContentLoaded", function () {
                         statusText: response.statusText
                     })
                 };
+=======
+            .then(response => response.json())
+            .then(data => {
+
+                document.querySelector("form.textbox").style.display =
+                    "block";
+                document.querySelector("#loading").style.display =
+                    "none";
+                companies.push(...data);
+                updateStorage('comapnies', companies);
+                displayCompanies();
+
+>>>>>>> d601ca680970e09d44d1b9a3d1811da199ef78a2
             })
             .catch(error => console.error(error));
     } else {
         //show form as no need to retrieve info
         document.querySelector("form.textbox").style.display = "block";
         document.querySelector("#loading").style.display = "none";
+        displayCompanies();
     }
-    displayCompanies();
 
 
     function displayCompanies() {
@@ -329,6 +350,14 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector('#showCharts').addEventListener("click", event => {
         showCharts();
     });
+
+    document.querySelector('#closeCharts').addEventListener('click', (event) => {
+        hideCharts();
+    });
+    document.querySelector('#readAloud').addEventListener('click', () => {
+        const utterance = new SpeechSynthesisUtterance(companyDesc);
+        speechSynthesis.speak(utterance);
+    });
     const showCharts = function () {
         let standardElements = document.querySelectorAll('.defaultView');
         let chartElements = document.querySelectorAll('.chartView');
@@ -338,23 +367,20 @@ document.addEventListener("DOMContentLoaded", function () {
         chartElements.forEach((element) => {
             element.style = 'display: block';
         });
-        document.querySelector('#closeCharts').addEventListener('click', (event) => {
-            hideCharts();
-        });
-
         let companyData = retrieveStorage('selectedCompany');
         let companyBoxTitle = document.querySelector('.g h2');
         let companyBoxDesciption = document.querySelector('.g p');
+        companyDesc = companyData.description;
         companyBoxTitle.textContent = `${companyData.name} - ${companyData.symbol}`;
         companyBoxDesciption.textContent = companyData.description;
         displayFinancials(companyData);
-        document.querySelector('#readAloud').addEventListener('click', () => {
-            const utterance = new SpeechSynthesisUtterance(companyData.description);
-            speechSynthesis.speak(utterance);
-        });
+
         drawCharts(companyData);
 
     };
+
+
+
     const hideCharts = function () {
         let standardElements = document.querySelectorAll('.defaultView');
         let chartElements = document.querySelectorAll('.chartView');
@@ -539,7 +565,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     {
                         label: 'Data',
                         data: data,
-                        // borderColor: min.o > min.c ? "#FF4444" : "#44FF44"
                         color: {
                             up: '#44FF44',
                             down: '#FF4444',
@@ -547,6 +572,13 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
                     }
                 ]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
             }
         });
     }
