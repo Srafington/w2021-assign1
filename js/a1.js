@@ -92,10 +92,14 @@ document.addEventListener("DOMContentLoaded", function () {
             displayInfo(selectedCompany);
             displayMap(selectedCompany);
             const stockQuery = `${stockLink}${selectedCompany.symbol}`;
+            document.querySelector("#stock").style.display = "none";
+            document.querySelector("#loadingStock").style.display = "block";
             fetch(stockQuery)
                 .then(response => {
                     if (response.ok) {
                         return response.json().then(data => {
+                            document.querySelector("#stock").style.display = "block";
+                            document.querySelector("#loadingStock").style.display = "none";
                             updateStorage('stocks', data);
                             displayStock(data, defaultSort);
                             displayStats(data);
@@ -120,6 +124,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             });
                         })
                     } else {
+                        document.querySelector("#loadingStock").style.display = "none";
                         return Promise.reject({
                             status: response.status,
                             statusText: response.statusText

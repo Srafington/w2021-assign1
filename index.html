@@ -25,6 +25,13 @@
                 <div class="dropdown-content">
                     <p>Group Members: Jon Axford & Latonia To</p>
                     <p>Credits for 3rd Party Technology: </p>
+                    <ul>
+                        <li>ChartJS</li>
+                        <li>ChartJS Financials Plugin</li>
+                        <li>Luxon and Luxon ChartJS adaptor (Required for ChartJS Financials)</li>
+                        <li>FontAwesome 5</li>
+                        <li>Google Maps</li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -61,6 +68,9 @@
         </div>
         <div class="box d defaultView">
             <h1>Stock Data</h1> <input type="button" id="showCharts" value="Show Charts">
+            <div id="loadingStock">
+                <i class="fas fa-10x fa-spinner fa-pulse"></i>
+            </div>
             <table id="stock">
                 <tr id="stockHeaders">
                     <th>Date</th>
