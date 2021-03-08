@@ -12,22 +12,54 @@ document.addEventListener("DOMContentLoaded", function () {
     let lineChart;
     let candleChart;
 
+    /**
+     * Helper to get a stored object 
+     * @param {*} key they key that the data is stored under
+     * @returns Object, parsed from what's stored
+     */
     function retrieveStorage(key) {
         return JSON.parse(localStorage.getItem(key))
             || [];
     }
-
+    /**
+     * Inserts value as a text formatted JSON string into local storage under the key. WIll overwrite anything currently under the key
+     * @param {*} key lookup name of the item to store
+     * @param {*} value object to store
+     */
     function updateStorage(key, value) {
         localStorage.setItem(key,
             JSON.stringify(value));
     }
 
+    // Event Handlers
+
+    /**
+     * Event listener for the credits dropdown
+     */
     document.querySelector("#dropdown").addEventListener("mouseover", () => {
         const creditsPane = document.querySelector("#credits-pane");
         creditsPane.style = "display: block";
         setTimeout(() => {
             creditsPane.style = "display: none";
         }, 5000);
+    });
+
+    //keyboard event handlers
+    const searchBox = document.querySelector('.search');
+    searchBox.addEventListener('keyup', displayMatches);
+
+    //https://www.w3schools.com/howto/howto_js_filter_lists.asp
+
+    document.querySelector('#showCharts').addEventListener("click", event => {
+        showCharts();
+    });
+
+    document.querySelector('#closeCharts').addEventListener('click', (event) => {
+        hideCharts();
+    });
+    document.querySelector('#readAloud').addEventListener('click', () => {
+        const utterance = new SpeechSynthesisUtterance(companyDesc);
+        speechSynthesis.speak(utterance);
     });
 
 
@@ -60,7 +92,9 @@ document.addEventListener("DOMContentLoaded", function () {
         displayCompanies();
     }
 
-
+    /**
+     * Displays companies in the list
+     */
     function displayCompanies() {
         const list = document.querySelector("#companyList");
         list.innerHTML = "";
@@ -71,11 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
     }
 
-    //keyboard event handlers
-    const searchBox = document.querySelector('.search');
-    searchBox.addEventListener('keyup', displayMatches);
 
-    //https://www.w3schools.com/howto/howto_js_filter_lists.asp
 
     function displayMatches() {
         filter = searchBox.value.toUpperCase();
@@ -152,44 +182,36 @@ document.addEventListener("DOMContentLoaded", function () {
     //         barChart = new new Chart(ctx, {});
     //     }
     // });
-
+    /**
+     * Displays stock information
+     * @param stocks object holding the stock data
+     */
     function displayStats(stocks) {
         document.querySelector(".e").style.height = "300px";
+
+        const statsCalc = (label, key, sort) => {
+            let average = 0;
+            stocks.forEach(stock => average += parseFloat(stock[key]));
+            const sorted = stocks.sort(sort);
+            return [label, Math.round(average / stocks.length),
+                Math.round(parseFloat(sorted[0][key])), Math.round(parseFloat(sorted[sorted.length - 1][key]))];
+        }
         const stats = [];
+        
         //volume calculations
-        let averageVolume = 0;
-        stocks.forEach(stock => averageVolume += parseFloat(stock.volume));
-        const sortedByVolume = stocks.sort(volumeSort);
-        stats.push(["Volume:", Math.round(averageVolume / stocks.length),
-            Math.round(parseFloat(sortedByVolume[0].volume)), Math.round(parseFloat(sortedByVolume[sortedByVolume.length - 1].volume))]);
-
+        stats.push(statsCalc("Volume:", "volume", volumeSort));
+        
         //open calculations
-        let averageOpen = 0;
-        stocks.forEach(stock => averageOpen += parseFloat(stock.open));
-        const sortedByOpen = stocks.sort(openSort);
-        stats.push(["Open:", currency(averageOpen / stocks.length),
-            currency(parseFloat(sortedByOpen[0].open)), currency(parseFloat(sortedByOpen[sortedByOpen.length - 1].open))]);
-
+        stats.push(statsCalc("Open:", "open", openSort));
+        
         //close calculations
-        let averageClose = 0;
-        stocks.forEach(stock => averageClose += parseFloat(stock.close));
-        const sortedByClose = stocks.sort(closeSort);
-        stats.push(["Close:", currency(averageClose / stocks.length),
-            currency(parseFloat(sortedByClose[0].close)), currency(parseFloat(sortedByClose[sortedByClose.length - 1].close))]);
-
+        stats.push(statsCalc("Close: ", "close", closeSort));
+        
         //high calculations
-        let averageHigh = 0;
-        stocks.forEach(stock => averageHigh += parseFloat(stock.high));
-        const sortedByHigh = stocks.sort(highSort);
-        stats.push(["High:", currency(averageHigh / stocks.length),
-            currency(parseFloat(sortedByHigh[0].high)), currency(parseFloat(sortedByHigh[sortedByHigh.length - 1].high))]);
+        stats.push(statsCalc("High: ", "high", highSort));
 
         //low calculations
-        let averageLow = 0;
-        stocks.forEach(stock => averageLow += parseFloat(stock.low));
-        const sortedByLow = stocks.sort(lowSort);
-        stats.push(["Low:", currency(averageLow / stocks.length),
-            currency(parseFloat(sortedByLow[0].low)), currency(parseFloat(sortedByLow[sortedByHigh.length - 1].low))]);
+        stats.push(statsCalc("Low: ", "low", lowSort));
 
         const table = document.querySelector("#stats");
         table.innerHTML = `<tr id="statHeaders"><th>Data Category</th><th>Average</th><th>Maximum</th><th>Minimum</th></tr>`
@@ -207,6 +229,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
+    // SORTS
+
     function defaultSort(a, b) {
         if (new Date(a.date) < new Date(b.date)) {
             return 1;
@@ -215,18 +239,6 @@ document.addEventListener("DOMContentLoaded", function () {
         } else
             return 0;
     }
-    // function volumeSort(property) {
-    //     let value = property;
-    //     function sortFunction(a, b){
-    //     if (a.value < b.value) {
-    //         return 1;
-    //     } else if (a.value > b.value) {
-    //         return -1
-    //     } else
-    //         return 0;
-    // }
-    // return sortFunction;
-    // }
 
     function volumeSort(a, b) {
         if (parseInt(a.volume) < parseInt(b.volume)) {
@@ -273,11 +285,16 @@ document.addEventListener("DOMContentLoaded", function () {
             return 0;
     }
 
-
+    /**
+     * Draws a populated table with stock data
+     * @param {*} stocks 
+     * @param {*} sortFunction 
+     */
     function displayStock(stocks, sortFunction) {
-        document.querySelector("table").style.overflowY = "scroll";
-        document.querySelector("#stock").innerHTML = `<tr id="stockHeaders">
-        <th>Date</th><th>Volume</th><th>Open</th><th>Close</th><th>High</th><th>Low</th></tr>`;
+        const stocksTable = document.querySelector('#stock');
+        const tableHeader = stocksTable.querySelector('#stockHeaders');
+        stocksTable.innerHTML = '';
+        stocksTable.appendChild(tableHeader);
         const sortedStock = stocks.sort(sortFunction);
         document.querySelector("#showCharts").style = "display: inline";
         const table = document.querySelector("#stock");
@@ -303,6 +320,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    /**
+     * Populates Company info
+     * @param {*} selectedCompany the company that was selected
+     */
     function displayInfo(selectedCompany) {
         document.querySelector("div.b section").style.display = "flex";
         document.querySelector("#logo").src = `logos/${selectedCompany.symbol}.svg`;
@@ -316,7 +337,10 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelector("#description").textContent = selectedCompany.description;
     }
 
-
+    /**
+     * Preps the map for drawing
+     * @param {*} company company object
+     */
     function displayMap(company) {
         let longitude = company.longitude;
         let latitude = company.latitude;
@@ -325,7 +349,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-
+    /**
+     * calls the Map API
+     * @param {*} longitude 
+     * @param {*} latitude 
+     */
     function drawMap(longitude, latitude) {
         map = new google.maps.Map(document.querySelector('#map'), {
             center: { lat: latitude, lng: longitude },
@@ -334,23 +362,21 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    /**
+     * Currency format helper
+     * @param {*} num the number to format
+     * @returns formatted currency value
+     */
     const currency = function (num) {
         return new Intl.NumberFormat('en-us', {
             style: 'currency',
             currency: 'USD'
         }).format(num);
     };
-    document.querySelector('#showCharts').addEventListener("click", event => {
-        showCharts();
-    });
 
-    document.querySelector('#closeCharts').addEventListener('click', (event) => {
-        hideCharts();
-    });
-    document.querySelector('#readAloud').addEventListener('click', () => {
-        const utterance = new SpeechSynthesisUtterance(companyDesc);
-        speechSynthesis.speak(utterance);
-    });
+    /**
+     * Preps the page to show the charts view and calls their draw methods
+     */
     const showCharts = function () {
         let standardElements = document.querySelectorAll('.defaultView');
         let chartElements = document.querySelectorAll('.chartView');
@@ -367,13 +393,13 @@ document.addEventListener("DOMContentLoaded", function () {
         companyBoxTitle.textContent = `${companyData.name} - ${companyData.symbol}`;
         companyBoxDesciption.textContent = companyData.description;
         displayFinancials(companyData);
-
         drawCharts(companyData);
-
     };
 
 
-
+    /**
+     * Returns the page to teh default view, unloads the charts
+     */
     const hideCharts = function () {
         let standardElements = document.querySelectorAll('.defaultView');
         let chartElements = document.querySelectorAll('.chartView');
@@ -388,6 +414,10 @@ document.addEventListener("DOMContentLoaded", function () {
         lineChart.destroy();
     };
 
+    /**
+     * erases and redraws the financials box
+     * @param {*} companyData 
+     */
     const displayFinancials = function (companyData) {
         const financialsTable = document.querySelector('.i table');
         const tableHeader = financialsTable.querySelector('#tableHeader');
@@ -414,12 +444,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
+    /**
+     * Helper that creates a table cell
+     * @param {*} value to put in the cell
+     * @returns a cell node
+     */
     const createTableCell = function (value) {
         const tableCell = document.createElement('td');
         tableCell.textContent = value;
         return tableCell;
     }
 
+    /**
+     * Calls the charts to be drawn
+     * @param {*} companyData teh data we'll be using
+     */
     const drawCharts = function (companyData) {
         const barChartContext = document.querySelector('#barChart').getContext('2d');
         const stocks = retrieveStorage('stocks');
@@ -439,6 +478,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     };
 
+    /**
+     * Draws a bar chart
+     * @param {*} context canvas context
+     * @param {*} financials object containing the data to be used
+     */
     const drawBarChart = function (context, financials) {
         if (financials) {
             barChart = new Chart(context, {
@@ -515,7 +559,11 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-
+    /**
+     * Draws a Candle Chart
+     * @param {*} context canvas context
+     * @param {*} stocks data to be used
+     */
     const drawCandleChart = function (context, stocks) {
         // let min = getCandle(stocks, Math.min, 1);
         // let max = getCandle(stocks, Math.max, 2);
@@ -594,9 +642,23 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    /**
+     * Helper that provides mapped values
+     * @param {*} stock array of objects to map
+     * @param {*} key item in teh map to map
+     * @returns 
+     */
     const getMap = (stock, key) => {
         return stock.map(val => val[key]);
     }
+
+    /**
+     * Provides a datapoint for a candle chart
+     * @param {*} stock data to be used
+     * @param {*} aggregationFunction function we are going to aggregate by
+     * @param {*} pos chart position
+     * @returns a dataset entry
+     */
     const getCandle = function (stock, aggregationFunction, pos) {
         return {
             "t": pos,
@@ -609,9 +671,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-
-
-
+    /**
+     * Draws the line graph
+     * @param {*} context canvas context
+     * @param {*} stocks data to be used
+     */
     const drawLineChart = function (context, stocks) {
         const series1 = getMap(stocks, 'volume');
         const series2 = getMap(stocks, 'open');
@@ -657,7 +721,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     y2: {
                         position: 'right',
                         gridLines: {
-                            drawOnChartArea: false, // only want the grid lines for one axis to show up
+                            drawOnChartArea: false,
                         },
                         ticks: {
                             beginAtZero: true,
@@ -687,12 +751,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    const chartTick = function (value, index, values) {
-        if(value>1000_000){
-            return currency(value/1000_000) + 'M';
+    /**
+     * Helper for formatting axes ticks
+     * @param {*} value value of the tick
+     * @returns formatted string
+     */
+    const chartTick = function (value) {
+        if (value > 1000_000) {
+            return currency(value / 1000_000) + 'M';
         }
-        if(value>1000){
-            return currency(value/1000) + 'k';
+        if (value > 1000) {
+            return currency(value / 1000) + 'k';
         }
         return currency(value);
     }
