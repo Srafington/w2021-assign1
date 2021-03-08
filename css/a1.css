@@ -175,3 +175,23 @@ tr:nth-child(even) {
 td{
     padding: 5px 8px;
 }
+
+#stock {
+    display: none;
+    font-size: 14px;
+}
+
+#stats {
+    display: none;
+    font-size: 14px;
+}
+
+#info label {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+#info span {
+    font-weight: normal;
+    font-size: 15px;
+}
