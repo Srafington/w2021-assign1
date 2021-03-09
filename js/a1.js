@@ -1,3 +1,8 @@
+/**
+ * COMP-3512: Web 2
+ * @author Jonathan Axford
+ * @author Latonia To
+ */
 document.addEventListener("DOMContentLoaded", function () {
 
     // the URLs for our data
