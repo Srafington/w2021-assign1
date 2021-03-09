@@ -405,6 +405,7 @@ document.addEventListener("DOMContentLoaded", function () {
      * Preps the page to show the charts view and calls their draw methods
      */
     const showCharts = function () {
+        document.querySelector('.container').style = "grid-template-rows: 100px;";
         let standardElements = document.querySelectorAll('.defaultView');
         let chartElements = document.querySelectorAll('.chartView');
         standardElements.forEach((element) => {
@@ -428,6 +429,7 @@ document.addEventListener("DOMContentLoaded", function () {
      * Returns the page to teh default view, unloads the charts
      */
     const hideCharts = function () {
+        document.querySelector('.container').style = "grid-template-rows: 100px 500px 20px 50px 200px 200px 100px;";
         let standardElements = document.querySelectorAll('.defaultView');
         let chartElements = document.querySelectorAll('.chartView');
         standardElements.forEach((element) => {
