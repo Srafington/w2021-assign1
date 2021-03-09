@@ -203,8 +203,13 @@ document.addEventListener("DOMContentLoaded", function () {
             let average = 0;
             stocks.forEach(stock => average += parseFloat(stock[key]));
             const sorted = stocks.sort(sort);
-            return [label, Math.round(average / stocks.length),
-                Math.round(parseFloat(sorted[0][key])), Math.round(parseFloat(sorted[sorted.length - 1][key]))];
+            if (key == "volume"){
+                return [label, Math.round(average / stocks.length),
+                    Math.round(parseFloat(sorted[0][key])), Math.round(parseFloat(sorted[sorted.length - 1][key]))];
+                } else {
+                    return [label, currency(average / stocks.length),
+                        currency(parseFloat(sorted[0][key])), currency(parseFloat(sorted[sorted.length - 1][key]))];
+                }
         }
         const stats = [];
         
