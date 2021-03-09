@@ -171,6 +171,7 @@ canvas {
 }
 #showCharts {
   display: none;
+  float: right;
 }
 
 #loading {
@@ -209,6 +210,10 @@ td {
   display: none;
 }
 
+#stock{
+    margin-top: 5em;
+}
+
 #info label {
   font-weight: bold;
   font-size: 15px;
@@ -242,6 +247,7 @@ h1 {
   background-color: var(--foreground);
   color: var(--background);
   border-radius: 5px;
+  margin: 0 -.5em 0.5em -.5em;
 }
 .h h1 {
   padding: 14px;
@@ -268,7 +274,9 @@ button:active {
     margin-left: 20px;
 }
 
-#header{
+#header {
     display: flex;
 }
+
+
 
