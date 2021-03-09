@@ -78,7 +78,7 @@ div.b section label {
 #map {
   border-radius: 5px;
   /* max-width: 100%; */
-  max-height: 470px;
+  max-height: 450px;
   margin: -1em -1em -3em -1em;
 }
 #map button{
@@ -198,9 +198,16 @@ table {
   border-collapse: collapse;
   padding: 1em;
   width: 100%;
-  overflow-y: scroll;
   display: table;
   margin-top: 1em;
+  text-align: center;
+}
+#table{
+  display: block;
+  max-height: 650px;
+  overflow-y: scroll;
+  width: 100%;
+  margin-top: 5em;
 }
 
 tr:nth-child(even) {
@@ -224,9 +231,7 @@ td {
   margin-right: auto;
 }
 
-#stock{
-    margin-top: 5em;
-}
+
 
 #info label {
   font-weight: bold;

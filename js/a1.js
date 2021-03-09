@@ -224,9 +224,12 @@ document.addEventListener("DOMContentLoaded", function () {
         //low calculations
         stats.push(statsCalc("Low: ", "low", lowSort));
 
-        const table = document.querySelector("#stats");
-        table.innerHTML = `<tr id="statHeaders"><th>Data Category</th><th>Average</th><th>Maximum</th><th>Minimum</th></tr>`
-        table.style.display = "block";
+        const table = document.querySelector('#stats');
+        const tableHeader = table.querySelector('#statHeaders');
+        table.innerHTML = '';
+        table.appendChild(tableHeader);
+        table.style.display = "table";
+        
         for (let category of stats) {
             let row = document.createElement("tr");
             for (let item of category) {
@@ -309,7 +312,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const sortedStock = stocks.sort(sortFunction);
         document.querySelector("#showCharts").style = "display: inline";
         const table = document.querySelector("#stock");
-        table.style.display = "block";
+        table.style.display = "table";
         for (let stock of sortedStock) {
             let row = document.createElement("tr");
             for (let item in stock) {
