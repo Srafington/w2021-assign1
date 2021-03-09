@@ -633,7 +633,8 @@ document.addEventListener("DOMContentLoaded", function () {
                             up: '#44FF44',
                             down: '#FF4444',
                             unchanged: '#999'
-                        }
+                        },
+                        yAxisID: 'y'
                     }
                 ]
             },
@@ -648,6 +649,13 @@ document.addEventListener("DOMContentLoaded", function () {
                         font: {
                             size: 16,
                             family: "'Comfortaa', sans-serif"
+                        }
+                    }
+                },
+                scales: {
+                    y:{
+                        ticks:{
+                            callback: chartTickCurrency
                         }
                     }
                 }
