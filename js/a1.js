@@ -719,6 +719,12 @@ document.addEventListener("DOMContentLoaded", function () {
                         title: {
                             display: true,
                             text: 'Volume'
+                            //This is how V3 is supposed to do it
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Volume'
+                            //Here's how V2 did it, and V3 still does
                         }
                     },
                     y2: {
@@ -730,7 +736,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             beginAtZero: true,
                             callback: chartTickCurrency
                         },
-                        title: {
+                        scaleLabel: {
                             display: true,
                             text: 'Dollars'
                         }
