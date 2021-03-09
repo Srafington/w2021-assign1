@@ -40,7 +40,7 @@ h2 {
   padding: 20px;
   margin: 0px;
   overflow-y: scroll;
-  height: 700px;
+  height: 850px;
 }
 
 #stock {
@@ -53,12 +53,11 @@ ul#companyList li {
   /* border: 1px solid rgb(128, 125, 125); */
   display: block;
   cursor: pointer;
-  margin-bottom: 10px;
   font-size: 16px;
   padding: 10px;
 }
 #companyList li:hover {
-  background-color: var(--background);
+  background-color: #E5E5E5;
   border-radius: 5px;
   box-shadow: 5px 5px 5px -2px var(--shadow);
   transition: 0.15s;
@@ -78,9 +77,18 @@ div.b section label {
 
 #map {
   border-radius: 5px;
-  max-width: 100%;
+  /* max-width: 100%; */
   box-shadow: 4px 4px 3px -1px var(--shadow);
-  max-height: 300px;
+  max-height: 350px;
+  margin: -1em -0.95em -4.95em -0.95em;
+}
+#map button{
+  padding: initial;
+  font-size: initial;
+  border-radius: initial;
+  border: initial;
+  margin: initial;
+  box-shadow: initial;
 }
 
 .box {
