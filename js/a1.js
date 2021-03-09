@@ -315,7 +315,7 @@ document.addEventListener("DOMContentLoaded", function () {
         for (let stock of sortedStock) {
             let row = document.createElement("tr");
             for (let item in stock) {
-                if (item == "open" || item == "close" || item == "high" || item == "low") {
+                if (["open" , "close" , "high" , "low"].includes(item)) {
                     let data = document.createElement("td");
                     data.textContent = currency(stock[item]);
                     row.appendChild(data);
@@ -386,6 +386,14 @@ document.addEventListener("DOMContentLoaded", function () {
             style: 'currency',
             currency: 'USD'
         }).format(num);
+    };
+    /**
+     * Number format helper
+     * @param {*} num the number to format
+     * @returns formatted value
+     */
+    const numFormat = function (num) {
+        return new Intl.NumberFormat('en-us').format(num);
     };
 
     /**
@@ -536,7 +544,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             position: 'left',
                             ticks: {
                                 beginAtZero: true,
-                                callback: chartTick
+                                callback: chartTickCurrency
                             }
                         }
                     },
@@ -579,41 +587,6 @@ document.addEventListener("DOMContentLoaded", function () {
      * @param {*} stocks data to be used
      */
     const drawCandleChart = function (context, stocks) {
-        // let min = getCandle(stocks, Math.min, 1);
-        // let max = getCandle(stocks, Math.max, 2);
-        // let avg = getCandle(stocks, (...arguments) => arguments.reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / arguments.length, 3);
-        // let none = {
-        //     "t": 0,
-        //     "l": 0,
-        //     "h": 0,
-        //     "o": 0,
-        //     "c": 0
-        // }
-        // candleChart = new Chart(context, {
-        //     type: 'candlestick',
-        //     data: {
-        //         datasets: [
-        //             {
-        //                 label: 'Minimum OCLH',
-        //                 data: [min, min],
-        //                 backgroundColor: min.o > min.c ? "#FF4444" : "#44FF44",
-        //                 borderColor: min.o > min.c ? "#FF4444" : "#44FF44"
-        //             },
-        //             {
-        //                 label: 'Maximum OCLH',
-        //                 data: [min, max],
-        //                 backgroundColor: max.o > max.c ? "#FF4444" : "#44FF44",
-        //                 borderColor: max.o > max.c ? "#FF4444" : "#44FF44"
-        //             },
-        //             {
-        //                 label: 'Average OCLH',
-        //                 data: [min, avg],
-        //                 backgroundColor: avg.o > avg.c ? "#FF4444" : "#44FF44",
-        //                 borderColor: avg.o > avg.c ? "#FF4444" : "#44FF44"
-        //             }
-        //         ]
-        //     }
-        // });
         let data = stocks.map((stock) => {
             return {
                 "t": (new Date(stock.date)).valueOf(),
@@ -666,24 +639,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return stock.map(val => val[key]);
     }
 
-    /**
-     * Provides a datapoint for a candle chart
-     * @param {*} stock data to be used
-     * @param {*} aggregationFunction function we are going to aggregate by
-     * @param {*} pos chart position
-     * @returns a dataset entry
-     */
-    const getCandle = function (stock, aggregationFunction, pos) {
-        return {
-            "t": pos,
-            "l": aggregationFunction(...getMap(stock, 'low')),
-            "h": aggregationFunction(...getMap(stock, 'high')),
-            "o": aggregationFunction(...getMap(stock, 'open')),
-            "c": aggregationFunction(...getMap(stock, 'close'))
-        };
-
-    }
-
 
     /**
      * Draws the line graph
@@ -725,7 +680,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         position: 'left',
                         ticks: {
                             beginAtZero: true,
-                            callback: chartTick
+                            callback: chartTickNum
                         },
                         title: {
                             display: true,
@@ -739,7 +694,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         },
                         ticks: {
                             beginAtZero: true,
-                            callback: chartTick
+                            callback: chartTickCurrency
                         },
                         title: {
                             display: true,
@@ -766,18 +721,37 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /**
+     * Helper for formatting axes ticks for currecny
+     * @param {*} value value of the tick
+     * @returns currency formatted string
+     */
+    const chartTickCurrency = function (value) {
+        return tickFormater(value, currency);
+    }
+    /**
      * Helper for formatting axes ticks
      * @param {*} value value of the tick
      * @returns formatted string
      */
-    const chartTick = function (value) {
+    const chartTickNum = function (value) {
+        return tickFormater(value, numFormat);
+    }
+
+    /**
+     * The helper's helper. Allows a formatter to be injected to minimize code duplication
+     * @param {*} value number to format
+     * @param {*} formatFn function to format with
+     * @returns formatted number
+     */
+    const tickFormater = function (value, formatFn) {
+
         if (value > 1000_000) {
-            return currency(value / 1000_000) + 'M';
+            return formatFn(value / 1000_000) + 'M';
         }
         if (value > 1000) {
-            return currency(value / 1000) + 'k';
+            return formatFn(value / 1000) + 'k';
         }
-        return currency(value);
+        return formatFn(value);
     }
 });
 

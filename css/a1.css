@@ -22,7 +22,7 @@ h2 {
   display: grid;
   grid-gap: 10px;
   grid-template-columns: 350px 1fr 1fr;
-  grid-template-rows: 100px;
+  grid-template-rows: 100px 500px 20px 50px 200px 200px 100px;
   height: 100%;
   width: 100%;
 }
@@ -77,9 +77,7 @@ div.b section label {
 
 #map {
   border-radius: 5px;
-  /* max-width: 100%; */
-  max-height: 450px;
-  margin: -1em -1em -3em -1em;
+  max-height: 89%;
 }
 #map button{
   padding: initial;
@@ -118,6 +116,11 @@ div.b section label {
 .c {
   grid-column: 2 / span 1;
   grid-row: 5 / span 3;
+  /* height: 400px; */
+  padding: 0em;
+}
+.c h1{
+  margin: 0;
 }
 
 .d {
