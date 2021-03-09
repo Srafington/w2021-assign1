@@ -40,7 +40,7 @@ h2 {
   padding: 20px;
   margin: 0px;
   overflow-y: scroll;
-  height: 850px;
+  max-height: 850px;
 }
 
 #stock {
@@ -78,9 +78,8 @@ div.b section label {
 #map {
   border-radius: 5px;
   /* max-width: 100%; */
-  box-shadow: 4px 4px 3px -1px var(--shadow);
-  max-height: 350px;
-  margin: -1em -0.95em -4.95em -0.95em;
+  max-height: 470px;
+  margin: -1em -1em -3em -1em;
 }
 #map button{
   padding: initial;
