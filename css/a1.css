@@ -231,7 +231,10 @@ th {
   margin-right: auto;
 }
 
-
+#info {
+    padding-left: 20px;
+    padding-right: 20px;
+}
 
 #info label {
   font-weight: bold;
@@ -265,7 +268,7 @@ th {
 }
 
 h1 {
-  padding: 14px;
+  padding: 14px 14px 14px 20px;
   background-color: var(--foreground);
   color: var(--background);
   border-radius: 5px;
@@ -303,6 +306,7 @@ button:active {
 
 #header h1 {
   margin: auto 0 auto 0;
+  padding-left: 20px;
 }
 
 
