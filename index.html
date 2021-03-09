@@ -21,7 +21,7 @@
         <div class="box h" id="header">
             <h1>COMP 3512 Assign1</h1>
             <div id="dropdown">
-                <i id="Credit" class="fas fa-book"></i>
+                <i id="credit" class="fas fa-book"></i>
                 <div id="credits-pane" class="box">
                     <p>Group Members: Jon Axford & Latonia To</p>
                     <p>Credits for 3rd Party Technology: </p>
@@ -36,21 +36,21 @@
                 </div>
             </div>
         </div>
-        <div class="box a defaultView">
+        <div class="box a default-view">
             <h1>List of Companies</h1>
             <form class=textbox>
                 <fieldset>
                     <input type="text" class="search" placeholder="Type for matching company"
-                    title="Type in a company name"><button type="reset" id="clearButton"><i
+                    title="Type in a company name"><button type="reset" id="clear-button"><i
                         class="fas fa-undo"></i></button>
                         <div id="loading">
                             <i class="fas fa-10x fa-spinner fa-pulse"></i>
                         </div>
-                    <ul id="companyList"></ul>
+                    <ul id="company-list"></ul>
                 </fieldset>
             </form>
         </div>
-        <div class="box b defaultView">
+        <div class="box b default-view">
             <h1>Company Information</h1>
             <section id="info">
                 <img id="logo">
@@ -64,13 +64,13 @@
                 <label>Description: <span id="description"></span></label>
             </section>
         </div>
-        <div class="box c defaultView">
+        <div class="box c default-view">
             <h1>Map</h1>
             <div id="map"></div>
         </div>
-        <div class="box d defaultView">
-            <h1>Stock Data</h1> <button id="showCharts"><i class="fas fa-chart-bar"></i> Show Charts</button>
-            <div id="loadingStock">
+        <div class="box d default-view">
+            <h1>Stock Data</h1> <button id="show-charts"><i class="fas fa-chart-bar"></i> Show Charts</button>
+            <div id="loading-stock">
                 <i class="fas fa-10x fa-spinner fa-pulse"></i>
             </div>
             <div id="table">
@@ -87,7 +87,7 @@
                 </table>
             </div>
         </div>
-        <div class="box e defaultView">
+        <div class="box e default-view">
             <h1>Stock Statistics</h1>
             <table id="stats">
                 <tr id="statHeaders">
@@ -98,7 +98,7 @@
                 </tr>
             </table>
         </div>
-        <div class="box f chartView">
+        <div class="box f chart-view">
 
             <div id="bar-container">
                 <canvas id="barChart"></canvas>
@@ -112,13 +112,13 @@
             <span><button id="embiggen"><i class="fas fa-search-plus"></i></button><button
                     id="emsmallen"><i class="fas fa-search-minus"></i></button></span>
         </div>
-        <div class="box g chartView" id="company">
+        <div class="box g chart-view" id="company">
             <h1></h1>
             <p></p>
             <span><button id="readAloud"><i class="far fa-comment"></i> Speak</button>
                 <button id="closeCharts"><i class="far fa-window-close"></i> Close</button></span>
         </div>
-        <div class="box i chartView">
+        <div class="box i chart-view">
             <h1>
                 Financials
             </h1>

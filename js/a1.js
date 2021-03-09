@@ -52,8 +52,8 @@ document.addEventListener("DOMContentLoaded", function () {
     /**
      * Event listener for the clear button
      */
-    document.querySelector("#clearButton").addEventListener('click', function () {
-        document.querySelector("#companyList").innerHTML = "";
+    document.querySelector("#clear-button").addEventListener('click', function () {
+        document.querySelector("#company-list").innerHTML = "";
         displayCompanies();
     });
 
@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchBox = document.querySelector('.search');
     searchBox.addEventListener('keyup', displayMatches);
 
-    document.querySelector('#showCharts').addEventListener("click", event => {
+    document.querySelector('#show-charts').addEventListener("click", event => {
         showCharts();
     });
 
@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
      * Displays companies in the list
      */
     function displayCompanies() {
-        const list = document.querySelector("#companyList");
+        const list = document.querySelector("#company-list");
         list.innerHTML = "";
         companies.sort(function (a, b) {
             return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
@@ -126,10 +126,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-
+    /**
+     * filters the company list and show the matches
+     */
     function displayMatches() {
         filter = searchBox.value.toUpperCase();
-        ul = document.querySelector("#companyList");
+        ul = document.querySelector("#company-list");
         li = ul.getElementsByTagName("li");
         for (let i = 0; i < li.length; i++) {
             let item = li[i];
@@ -144,26 +146,28 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     //reference of JS for textbox input matching: https://www.w3schools.com/howto/howto_js_filter_lists.asp
 
-    document.querySelector("#companyList").addEventListener("click", function (e) {
+    document.querySelector("#company-list").addEventListener("click", function (e) {
         if (e.target && e.target.nodeName.toLowerCase() == "li") {
             const name = e.target.textContent;
             const selectedCompany = companies.find(company => company.name == name);
+            const stockQuery = `${stockLink}${selectedCompany.symbol}`;
+            const stock = document.querySelector("#stock");
+            const loadingSpinner = document.querySelector("#loading-stock");
             updateStorage('selectedCompany', selectedCompany);
             displayInfo(selectedCompany);
             displayMap(selectedCompany);
-            const stockQuery = `${stockLink}${selectedCompany.symbol}`;
-            document.querySelector("#stock").style.display = "none";
-            document.querySelector("#loadingStock").style.display = "block";
+            stock.style.display = "none";
+            loadingSpinner.style.display = "block"
             fetch(stockQuery)
                 .then(response => {
                     if (response.ok) {
                         return response.json().then(data => {
-                            document.querySelector("#stock").style.display = "block";
-                            document.querySelector("#loadingStock").style.display = "none";
+                            stock.style.display = "block";
+                            loadingSpinner.style.display = "none";
                             updateStorage('stocks', data);
                             displayStock(data, defaultSort);
                             displayStats(data);
-                            document.querySelector("#stock").addEventListener('click', function (e) {
+                            stock.addEventListener('click', function (e) {
 
                                 if (e.target && e.target.nodeName.toLowerCase() == "th") {
                                     if (e.target.textContent == "Date") {
@@ -184,7 +188,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             });
                         })
                     } else {
-                        document.querySelector("#loadingStock").style.display = "none";
+                        loadingSpinner.style.display = "none";
                         return Promise.reject({
                             status: response.status,
                             statusText: response.statusText
@@ -195,10 +199,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    /**
+     * toggles the charts from regular to big and back again
+     * @param {boolean} enlarge 
+     */
     const toggleChartSize = function (enlarge) {
-        const chartBox = document.querySelector(".box.f.chartView");
-        const financialBox = document.querySelector(".box.i.chartView");
-        const descriptionBox = document.querySelector(".box.g.chartView");
+        const chartBox = document.querySelector(".box.f.chart-view");
+        const financialBox = document.querySelector(".box.i.chart-view");
+        const descriptionBox = document.querySelector(".box.g.chart-view");
         const embiggenBtn = document.querySelector("#embiggen");
         const emsmallenBtn = document.querySelector("#emsmallen");
         if(enlarge){
@@ -338,7 +346,7 @@ document.addEventListener("DOMContentLoaded", function () {
         stocksTable.innerHTML = '';
         stocksTable.appendChild(tableHeader);
         const sortedStock = stocks.sort(sortFunction);
-        document.querySelector("#showCharts").style = "display: inline";
+        document.querySelector("#show-charts").style = "display: inline";
         const table = document.querySelector("#stock");
         table.style.display = "table";
         for (let stock of sortedStock) {
@@ -430,8 +438,8 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     const showCharts = function () {
         document.querySelector('.container').style = "grid-template-rows: 100px;";
-        let standardElements = document.querySelectorAll('.defaultView');
-        let chartElements = document.querySelectorAll('.chartView');
+        let standardElements = document.querySelectorAll('.default-view');
+        let chartElements = document.querySelectorAll('.chart-view');
         standardElements.forEach((element) => {
             element.style = 'display: none';
         });
@@ -454,8 +462,8 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     const hideCharts = function () {
         document.querySelector('.container').style = "grid-template-rows: 100px 500px 20px 50px 200px 200px 100px;";
-        let standardElements = document.querySelectorAll('.defaultView');
-        let chartElements = document.querySelectorAll('.chartView');
+        let standardElements = document.querySelectorAll('.default-view');
+        let chartElements = document.querySelectorAll('.chart-view');
         standardElements.forEach((element) => {
             element.style = 'display: block';
         });

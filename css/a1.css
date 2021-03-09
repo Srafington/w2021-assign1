@@ -31,7 +31,7 @@ body {
   margin-bottom: 12px;
 }
 
-#companyList {
+#company-list {
   list-style-type: none;
   padding: 20px;
   margin: 0px;
@@ -44,13 +44,13 @@ body {
   height: 80%;
 }
 
-ul#companyList li {
+ul#company-list li {
   display: block;
   cursor: pointer;
   font-size: 16px;
   padding: 10px;
 }
-#companyList li:hover {
+#company-list li:hover {
   background-color: #E5E5E5;
   border-radius: 5px;
   box-shadow: 5px 5px 5px -2px var(--shadow);
@@ -150,10 +150,10 @@ fieldset {
   height: 15em;
 }
 
-.defaultView {
+.default-view {
   display: block;
 }
-.chartView {
+.chart-view {
   display: none;
 }
 canvas {
@@ -175,7 +175,7 @@ canvas {
   width: 100%;
   display: inline-block;
 }
-#showCharts {
+#show-charts {
   display: none;
   float: right;
 }
@@ -184,7 +184,7 @@ canvas {
   padding-top: 50px;
   text-align: center;
 }
-#loadingStock {
+#loading-stock {
   padding-top: 50px;
   text-align: center;
   display: none;
@@ -245,7 +245,7 @@ th {
   font-size: 15px;
 }
 
-#Credit {
+#credit {
   font-size: 35px;
   padding: 31px 20px 20px 20px;
   margin: auto ;
@@ -294,7 +294,7 @@ button:active {
   box-shadow: 2px 2px 3px var(--shadow);
 }
 
-#clearButton {
+#clear-button {
     margin-left: 15px;
 }
 
