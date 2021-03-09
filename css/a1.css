@@ -239,6 +239,9 @@ td {
 
 h1 {
   padding: 14px;
+  background-color: var(--foreground);
+  color: var(--background);
+  border-radius: 5px;
 }
 .h h1 {
   padding: 14px;
