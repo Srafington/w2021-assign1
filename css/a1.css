@@ -188,6 +188,7 @@ table {
   width: 100%;
   overflow-y: scroll;
   display: table;
+  margin-top: 1em;
 }
 
 tr:nth-child(even) {
@@ -222,6 +223,9 @@ td {
 #Credit {
   font-size: 35px;
   padding: 31px 20px 20px 20px;
+  margin: auto ;
+  color: var(--background);
+  text-shadow: 2px 2px 3px #555;
 }
 
 #dropdown {
@@ -242,6 +246,7 @@ h1 {
   background-color: var(--foreground);
   color: var(--background);
   border-radius: 5px;
+  margin: 0em -.5em .5em -.5em;
 }
 .h h1 {
   padding: 14px;
@@ -270,5 +275,14 @@ button:active {
 
 #header{
     display: flex;
+    padding: 0;
 }
 
+#header h1 {
+  margin: auto 0 auto 0;
+}
+
+#credit{
+  margin: auto ;
+  color: white;
+}
