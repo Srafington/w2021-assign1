@@ -27,7 +27,7 @@ body {
 .search {
   margin-left: 20px;
   font-size: 13px;
-  padding: 18px 45px 15px 15px;
+  padding: 18px 40px 15px 15px;
   margin-bottom: 12px;
 }
 
@@ -295,7 +295,7 @@ button:active {
 }
 
 #clearButton {
-    margin-left: 20px;
+    margin-left: 15px;
 }
 
 #header {
