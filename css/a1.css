@@ -14,10 +14,7 @@ body {
   font-size: 0.8rem;
 }
 
-h2 {
-  /* padding-left: 1em; */
-  font-family: var(--header-font);
-}
+
 .container {
   display: grid;
   grid-gap: 10px;
@@ -31,7 +28,6 @@ h2 {
   margin-left: 20px;
   font-size: 13px;
   padding: 18px 45px 15px 15px;
-  /* border: 1px solid rgb(2, 2, 2); */
   margin-bottom: 12px;
 }
 
@@ -44,13 +40,11 @@ h2 {
 }
 
 #stock {
-  /* display: block; */
   overflow-y: scroll;
   height: 80%;
 }
 
 ul#companyList li {
-  /* border: 1px solid rgb(128, 125, 125); */
   display: block;
   cursor: pointer;
   font-size: 16px;
@@ -116,7 +110,6 @@ div.b section label {
 .c {
   grid-column: 2 / span 1;
   grid-row: 5 / span 3;
-  /* height: 400px; */
   padding: 0em;
 }
 .c h1{
@@ -218,6 +211,10 @@ tr:nth-child(even) {
 }
 td {
   padding: 5px 10px;
+}
+
+th {
+    font-size: 16px;
 }
 
 #stock,
