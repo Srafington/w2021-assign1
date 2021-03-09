@@ -14,10 +14,7 @@ body {
   font-size: 0.8rem;
 }
 
-h2 {
-  /* padding-left: 1em; */
-  font-family: var(--header-font);
-}
+
 .container {
   display: grid;
   grid-gap: 10px;
@@ -31,7 +28,6 @@ h2 {
   margin-left: 20px;
   font-size: 13px;
   padding: 18px 45px 15px 15px;
-  /* border: 1px solid rgb(2, 2, 2); */
   margin-bottom: 12px;
 }
 
@@ -44,13 +40,11 @@ h2 {
 }
 
 #stock {
-  /* display: block; */
   overflow-y: scroll;
   height: 80%;
 }
 
 ul#companyList li {
-  /* border: 1px solid rgb(128, 125, 125); */
   display: block;
   cursor: pointer;
   font-size: 16px;
@@ -218,6 +212,10 @@ td {
   padding: 5px 10px;
 }
 
+th {
+    font-size: 16px;
+}
+
 #stock,
 #stats,
 #financials,
@@ -232,7 +230,10 @@ td {
   margin-right: auto;
 }
 
-
+#info {
+    padding-left: 20px;
+    padding-right: 20px;
+}
 
 #info label {
   font-weight: bold;
@@ -266,7 +267,7 @@ td {
 }
 
 h1 {
-  padding: 14px;
+  padding: 14px 14px 14px 20px;
   background-color: var(--foreground);
   color: var(--background);
   border-radius: 5px;
@@ -304,6 +305,7 @@ button:active {
 
 #header h1 {
   margin: auto 0 auto 0;
+  padding-left: 20px;
 }
 
 
