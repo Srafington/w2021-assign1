@@ -139,9 +139,14 @@ div.b section label {
 fieldset {
   border: none;
 }
+
 #logo {
-  max-width: 100%;
-  max-height: 15em;
+  max-width: auto;
+  width: auto;
+  margin-left: auto;
+  margin-right: auto;
+  max-height: 30em;
+  height: 15em;
 }
 
 .defaultView {
