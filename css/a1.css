@@ -116,7 +116,6 @@ div.b section label {
 .c {
   grid-column: 2 / span 1;
   grid-row: 5 / span 3;
-  /* height: 400px; */
   padding: 0em;
 }
 .c h1{
@@ -126,7 +125,6 @@ div.b section label {
 .d {
   grid-column: 3 / span 1;
   grid-row: 2 / span 4;
-  max-height: 800px;
 }
 
 .e {
@@ -169,12 +167,12 @@ canvas {
 }
 #bar-container {
   position: relative;
-  width: 48%;
+  width: 49%;
   display: inline-block;
 }
 #candle-container {
   position: relative;
-  width: 48%;
+  width: 49%;
   display: inline-block;
 }
 
@@ -309,4 +307,10 @@ button:active {
 }
 
 
-
+#embiggen{
+  float: right;
+}
+#emsmallen{
+  float: right;
+  display: none;
+}

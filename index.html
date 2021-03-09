@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/a1.css">
     <link rel="shortcut icon" href="#">
     <script src="https://cdn.jsdelivr.net/npm/luxon@1.24.1"></script>
-    <script src="./js/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0-beta.9/dist/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@0.2.1"></script>
     <script src="./js/chartjs-chart-financial.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
@@ -44,7 +44,8 @@
             <form class=textbox>
                 <fieldset>
                     <input type="text" class="search" placeholder="Type for matching company"
-                        title="Type in a company name"><button type="reset" id="clearButton"><i class="fas fa-undo"></i></button>
+                        title="Type in a company name"><button type="reset" id="clearButton"><i
+                            class="fas fa-undo"></i></button>
                     <ul id="companyList"></ul>
                 </fieldset>
             </form>
@@ -68,7 +69,7 @@
             <div id="map"></div>
         </div>
         <div class="box d defaultView">
-            <h1>Stock Data</h1> <button id="showCharts" ><i class="fas fa-chart-bar"></i> Show Charts</button>
+            <h1>Stock Data</h1> <button id="showCharts"><i class="fas fa-chart-bar"></i> Show Charts</button>
             <div id="loadingStock">
                 <i class="fas fa-10x fa-spinner fa-pulse"></i>
             </div>
@@ -98,6 +99,7 @@
             </table>
         </div>
         <div class="box f chartView">
+
             <div id="bar-container">
                 <canvas id="barChart"></canvas>
             </div>
@@ -107,11 +109,13 @@
             <div id="line-container">
                 <canvas id="lineChart"></canvas>
             </div>
+            <span><button id="embiggen"><i class="fas fa-search-plus"></i></button><button
+                    id="emsmallen"><i class="fas fa-search-minus"></i></button></span>
         </div>
         <div class="box g chartView" id="company">
             <h1></h1>
             <p></p>
-            <span><button id="readAloud" ><i class="far fa-comment"></i> Speak</button>
+            <span><button id="readAloud"><i class="far fa-comment"></i> Speak</button>
                 <button id="closeCharts"><i class="far fa-window-close"></i> Close</button></span>
         </div>
         <div class="box i chartView">

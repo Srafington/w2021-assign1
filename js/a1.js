@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
     /**
      * Event listener for the clear button
      */
-    document.querySelector("#clearButton").addEventListener('click', function(){
+    document.querySelector("#clearButton").addEventListener('click', function () {
         document.querySelector("#companyList").innerHTML = "";
         displayCompanies();
     });
@@ -68,6 +68,12 @@ document.addEventListener("DOMContentLoaded", function () {
         speechSynthesis.speak(utterance);
     });
 
+    document.querySelector('#embiggen').addEventListener('click', (event) => {
+        toggleChartSize(true);
+    });
+    document.querySelector('#emsmallen').addEventListener('click', (event) => {
+        toggleChartSize(false);
+    });
 
     // hide form and display loading animation
     document.querySelector("form.textbox").style.display = "none";
@@ -105,7 +111,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function displayCompanies() {
         const list = document.querySelector("#companyList");
         list.innerHTML = "";
-        companies.sort(function(a, b){
+        companies.sort(function (a, b) {
             return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
         }).forEach(company => {
             let option = document.createElement('li');
@@ -184,14 +190,27 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // document.querySelector("#toggleCharts").addEventListener("click", function (e) {
-    //     let chartContext = document.getElementById('chart').getContext('2d');
-    //     if(chartContext){
+    const toggleChartSize = function (enlarge) {
+        const chartBox = document.querySelector(".box.f.chartView");
+        const financialBox = document.querySelector(".box.i.chartView");
+        const descriptionBox = document.querySelector(".box.g.chartView");
+        const embiggenBtn = document.querySelector("#embiggen");
+        const emsmallenBtn = document.querySelector("#emsmallen");
+        if(enlarge){
+            financialBox.style = "display: none";
+            descriptionBox.style = "display: none";
+            chartBox.style = "grid-column: 1 / span 3; display: block"
+            embiggenBtn.style = "display: none"
+            emsmallenBtn.style = "display: initial"
+        } else {
+            financialBox.style = "display: block";
+            descriptionBox.style = "display: block";
+            chartBox.style = "grid-column: 1 / span 2; display: block"
+            embiggenBtn.style = "display: initial"
+            emsmallenBtn.style = "display: none"
+        }
+    }
 
-    //         fetch
-    //         barChart = new new Chart(ctx, {});
-    //     }
-    // });
     /**
      * Displays stock information
      * @param stocks object holding the stock data
@@ -203,25 +222,25 @@ document.addEventListener("DOMContentLoaded", function () {
             let average = 0;
             stocks.forEach(stock => average += parseFloat(stock[key]));
             const sorted = stocks.sort(sort);
-            if (key == "volume"){
+            if (key == "volume") {
                 return [label, Math.round(average / stocks.length),
                     Math.round(parseFloat(sorted[0][key])), Math.round(parseFloat(sorted[sorted.length - 1][key]))];
-                } else {
-                    return [label, currency(average / stocks.length),
-                        currency(parseFloat(sorted[0][key])), currency(parseFloat(sorted[sorted.length - 1][key]))];
-                }
+            } else {
+                return [label, currency(average / stocks.length),
+                    currency(parseFloat(sorted[0][key])), currency(parseFloat(sorted[sorted.length - 1][key]))];
+            }
         }
         const stats = [];
-        
+
         //volume calculations
         stats.push(statsCalc("Volume:", "volume", volumeSort));
-        
+
         //open calculations
         stats.push(statsCalc("Open:", "open", openSort));
-        
+
         //close calculations
         stats.push(statsCalc("Close: ", "close", closeSort));
-        
+
         //high calculations
         stats.push(statsCalc("High: ", "high", highSort));
 
@@ -233,7 +252,7 @@ document.addEventListener("DOMContentLoaded", function () {
         table.innerHTML = '';
         table.appendChild(tableHeader);
         table.style.display = "table";
-        
+
         for (let category of stats) {
             let row = document.createElement("tr");
             for (let item of category) {
@@ -320,7 +339,7 @@ document.addEventListener("DOMContentLoaded", function () {
         for (let stock of sortedStock) {
             let row = document.createElement("tr");
             for (let item in stock) {
-                if (["open" , "close" , "high" , "low"].includes(item)) {
+                if (["open", "close", "high", "low"].includes(item)) {
                     let data = document.createElement("td");
                     data.textContent = currency(stock[item]);
                     row.appendChild(data);
@@ -705,7 +724,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         },
                         title: {
                             display: true,
-                            text: 'Opening Value'
+                            text: 'Dollars'
                         }
                     }
                 },
@@ -752,10 +771,10 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     const tickFormater = function (value, formatFn) {
 
-        if (value > 1000_000) {
+        if (Math.abs(value) > 1000_000) {
             return formatFn(value / 1000_000) + 'M';
         }
-        if (value > 1000) {
+        if (Math.abs(value) > 1000) {
             return formatFn(value / 1000) + 'k';
         }
         return formatFn(value);
