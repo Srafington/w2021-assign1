@@ -56,8 +56,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchBox = document.querySelector('.search');
     searchBox.addEventListener('keyup', displayMatches);
 
-    //https://www.w3schools.com/howto/howto_js_filter_lists.asp
-
     document.querySelector('#showCharts').addEventListener("click", event => {
         showCharts();
     });
@@ -133,6 +131,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
     }
+    //reference of JS for textbox input matching: https://www.w3schools.com/howto/howto_js_filter_lists.asp
 
     document.querySelector("#companyList").addEventListener("click", function (e) {
         if (e.target && e.target.nodeName.toLowerCase() == "li") {
@@ -340,6 +339,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelector("#logo").src = `logos/${selectedCompany.symbol}.svg`;
         document.querySelector("#symbol").textContent = selectedCompany.symbol;
         document.querySelector("#name").textContent = selectedCompany.name;
+        document.querySelector("#sector").textContent = selectedCompany.sector;
         document.querySelector("#sub").textContent = selectedCompany.subindustry;
         document.querySelector("#address").textContent = selectedCompany.address;
         document.querySelector("#website").href = selectedCompany.website;
