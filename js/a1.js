@@ -445,7 +445,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /**
-     * Returns the page to teh default view, unloads the charts
+     * Returns the page to the default view, unloads the charts
      */
     const hideCharts = function () {
         document.querySelector('.container').style = "grid-template-rows: 100px 500px 20px 50px 200px 200px 100px;";
@@ -505,7 +505,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /**
      * Calls the charts to be drawn
-     * @param {*} companyData teh data we'll be using
+     * @param {*} companyData the data we'll be using
      */
     const drawCharts = function (companyData) {
         const barChartContext = document.querySelector('#barChart').getContext('2d');
@@ -666,7 +666,7 @@ document.addEventListener("DOMContentLoaded", function () {
     /**
      * Helper that provides mapped values
      * @param {*} stock array of objects to map
-     * @param {*} key item in teh map to map
+     * @param {*} key item in the map to map
      * @returns 
      */
     const getMap = (stock, key) => {
