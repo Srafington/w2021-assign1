@@ -107,7 +107,9 @@ document.addEventListener("DOMContentLoaded", function () {
     function displayCompanies() {
         const list = document.querySelector("#companyList");
         list.innerHTML = "";
-        companies.forEach(company => {
+        companies.sort(function(a, b){
+            return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+        }).forEach(company => {
             let option = document.createElement('li');
             option.textContent = company.name;
             list.appendChild(option);
